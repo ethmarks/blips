@@ -8,6 +8,6 @@ export const sanityClient = createClient({
 });
 
 export async function getBlips() {
-  const blips = await client.fetch('*[_type == "blip"] {_id, _createdAt, body}')
+  const blips = await sanityClient.fetch('*[_type == "blip"] {_id, _createdAt, body}')
   return blips
 }
