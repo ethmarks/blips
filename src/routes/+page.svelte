@@ -3,6 +3,10 @@
         font-weight: 600;
         font-size: 1.4rem;
     }
+    .blip-time {
+        font-size: 0.8rem;
+        color: gray;
+    }
 </style>
 
 <script>
@@ -24,6 +28,7 @@
                 {#each blip.body[0].children as line}
                     <p>{line.text}</p>
                 {/each}
+                <p class="blip-time">{new Date(blip._createdAt).toLocaleDateString()}</p>
             {/each}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
