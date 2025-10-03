@@ -17,6 +17,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"@sanity/client": "^7.11.2"
+		"@sanity/client": "^7.11.2",
+		"marked": "^16.3.0"
 	}
 }
