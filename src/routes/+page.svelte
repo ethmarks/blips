@@ -19,7 +19,12 @@
         {#await blipsPromise}
             <p>Loading blips...</p>
         {:then blips}
-            <p>Found {blips.length} blips!</p>
+            {#each blips as blip}
+                <hr>
+                {#each blip.body[0].children as line}
+                    <p>{line.text}</p>
+                {/each}
+            {/each}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
         {/await}
