@@ -12,6 +12,27 @@
 <script>
   import { getBlips } from '../lib/sanity';
   let blipsPromise = getBlips();
+
+  function parseCreatedAt(createdAtDate) {
+    const minutesElapsed = Math.floor((Date.now() - createdAtDate.getTime()) / 60000);
+    if (minutesElapsed < 1) {
+      return "now";
+    }
+    else if (minutesElapsed <= 60) {
+      return minutesElapsed + "m ago"
+    }
+    else {
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        hour12: "true",
+        minute: "numeric"
+      }
+      return createdAtDate.toLocaleString("en-GB", options)
+    }
+  }
 </script>
 
 <h1 class="animated">Blips</h1>
@@ -28,7 +49,7 @@
                 {#each blip.body[0].children as line}
                     <p>{line.text}</p>
                 {/each}
-                <p class="blip-time">{new Date(blip._createdAt).toLocaleDateString()}</p>
+                <p class="blip-time">{parseCreatedAt(new Date(blip._createdAt))}</p>
             {/each}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
