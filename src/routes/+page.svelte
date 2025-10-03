@@ -10,8 +10,14 @@
 </style>
 
 <script>
+  import { marked } from 'marked';
   import { getBlips } from '../lib/sanity';
+
   let blipsPromise = getBlips();
+
+  function renderMarkdown(markdown) {
+      return marked(markdown || '');
+  }
 
   function parseCreatedAt(createdAtDate) {
     const minutesElapsed = Math.floor((Date.now() - createdAtDate.getTime()) / 60000);
@@ -46,11 +52,11 @@
         {:then blips}
             {#each blips as blip}
                 <hr>
-                {#each blip.body[0].children as line}
-                    <p>{line.text}</p>
-                {/each}
+                <div>{@html renderMarkdown(blip.content)}</div>
                 {@const createdAtDate = new Date(blip._createdAt)}
-                <time datetime="{createdAtDate.toISOString()}" class="blip-time">{parseCreatedAt(createdAtDate)}</time>
+                <time datetime="{createdAtDate.toISOString()}" class="blip-time">
+                    {parseCreatedAt(createdAtDate)}
+                </time>
             {/each}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
