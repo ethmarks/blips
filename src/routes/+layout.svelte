@@ -1,11 +1,9 @@
 <script>
-	import favicon from '$lib/assets/favicon.svg';
-
 	let { children } = $props();
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="https://ethmarks.github.io/favicon.ico" />
 	<link rel="stylesheet" href="https://ethmarks.github.io/css/global.min.css">
     <script src="https://ethmarks.github.io/js/ethmarks-components.js" defer></script>
 </svelte:head>
