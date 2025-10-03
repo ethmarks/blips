@@ -49,7 +49,8 @@
                 {#each blip.body[0].children as line}
                     <p>{line.text}</p>
                 {/each}
-                <p class="blip-time">{parseCreatedAt(new Date(blip._createdAt))}</p>
+                {@const createdAtDate = new Date(blip._createdAt)}
+                <time datetime="{createdAtDate.toISOString()}" class="blip-time">{parseCreatedAt(createdAtDate)}</time>
             {/each}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
