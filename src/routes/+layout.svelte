@@ -1,5 +1,6 @@
 <script>
 	let { children } = $props();
+	import '../lib/handleOverflow';
 </script>
 
 <svelte:head>

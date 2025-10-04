@@ -4,6 +4,15 @@
 
     let blipsPromise = getBlips();
 
+    // Call overflow check after blips load
+    blipsPromise.then(() => {
+        setTimeout(() => {
+            if (typeof window !== 'undefined' && window.updateOverflowClasses) {
+                window.updateOverflowClasses();
+            }
+        }, 50);
+    });
+
     function renderMarkdown(markdown) {
         return marked(markdown || "");
     }
