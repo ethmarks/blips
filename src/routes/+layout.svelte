@@ -35,13 +35,16 @@
 			}
 		}
 
-		window.updateOverflowClasses = updateOverflowClasses;
-		window.addEventListener("resize", updateOverflowClasses);
+		const resizeObserver = new ResizeObserver(() => {
+			updateOverflowClasses();
+		});
+
+		resizeObserver.observe(document.body);
 		updateOverflowClasses();
 
 		return () => {
+			resizeObserver.disconnect();
 			window.removeEventListener("resize", updateOverflowClasses);
-			delete window.updateOverflowClasses;
 		};
 	});
 </script>
