@@ -4,29 +4,15 @@
 
 	onMount(() => {
 		function updateOverflowClasses() {
-			const widthOverflowClass = "width-overflow";
 			const heightOverflowClass = "height-overflow";
-
 			const body = document.body;
-
-			const contentWidth = body.scrollWidth;
+			const containerHeight = window.innerHeight;
 			const contentHeight = Math.max(
 				document.documentElement.scrollHeight,
 				document.body.scrollHeight
 			);
 
-			const containerWidth = window.innerWidth;
-			const containerHeight = window.innerHeight;
-
-			if (contentHeight === 0 || contentWidth === 0) {
-				return;
-			}
-
-			if (contentWidth > containerWidth) {
-				body.classList.add(widthOverflowClass);
-			} else {
-				body.classList.remove(widthOverflowClass);
-			}
+			if (contentHeight === 0) { return; }
 
 			if (contentHeight > containerHeight) {
 				body.classList.add(heightOverflowClass);
