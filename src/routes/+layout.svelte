@@ -1,6 +1,49 @@
 <script>
+	import { onMount } from 'svelte';
 	let { children } = $props();
-	import '../lib/handleOverflow';
+
+	onMount(() => {
+		function updateOverflowClasses() {
+			const widthOverflowClass = "width-overflow";
+			const heightOverflowClass = "height-overflow";
+
+			const body = document.body;
+
+			const contentWidth = body.scrollWidth;
+			const contentHeight = Math.max(
+				document.documentElement.scrollHeight,
+				document.body.scrollHeight
+			);
+
+			const containerWidth = window.innerWidth;
+			const containerHeight = window.innerHeight;
+
+			if (contentHeight === 0 || contentWidth === 0) {
+				return;
+			}
+
+			if (contentWidth > containerWidth) {
+				body.classList.add(widthOverflowClass);
+			} else {
+				body.classList.remove(widthOverflowClass);
+			}
+
+			if (contentHeight > containerHeight) {
+				body.classList.add(heightOverflowClass);
+			} else {
+				body.classList.remove(heightOverflowClass);
+			}
+		}
+
+		window.updateOverflowClasses = updateOverflowClasses;
+		window.addEventListener("resize", updateOverflowClasses);
+		updateOverflowClasses();
+
+		return () => {
+			window.removeEventListener("resize", updateOverflowClasses);
+			delete window.updateOverflowClasses;
+		};
+	});
 </script>
 
 <svelte:head>
