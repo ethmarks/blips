@@ -4,7 +4,7 @@ import { sampleBlips } from './sampleBlips'
 export const sanityClient = createClient({
   projectId: 'nhqqp3l1',
   dataset: 'production',
-  useCdn: true,
+  useCdn: process.env.NODE_ENV === 'production',
   apiVersion: '2025-10-03',
 });
 
