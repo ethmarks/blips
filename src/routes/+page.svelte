@@ -4,6 +4,7 @@
     import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
     import Blip from "../lib/components/blip.svelte";
+    import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
 
     let blips = [];
     let loading = true;
@@ -13,6 +14,7 @@
     let hasMore = false;
     const pageSize = 20;
     const useSample = false; // for testing purposes only
+    let skeletonConfig = [];
 
     // Simple cache: map of page number to blips
     const pageCache = new Map();
@@ -26,6 +28,8 @@
             loading = false;
         } else {
             loading = true;
+            // Generate skeleton config once when loading starts
+            generateSkeletonConfig();
         }
 
         // Fetch a window: prev page + current page + next page
@@ -58,6 +62,17 @@
         }
     }
 
+    function generateSkeletonConfig() {
+        const count = Math.floor(Math.random() * 11) + 10; // 10-20 skeletons
+        skeletonConfig = Array.from({ length: count }, () => ({
+            lineCount: Math.floor(Math.random() * 3) + 1, // 1-3 lines
+            lineWidths: Array.from(
+                { length: Math.floor(Math.random() * 3) + 1 },
+                () => Math.floor(Math.random() * 40) + 40, // 40-80% width
+            ),
+        }));
+    }
+
     function navigateToPage(newPage) {
         if (newPage === currentPage) return;
 
@@ -80,6 +95,7 @@
             const params = new URLSearchParams(window.location.search);
             currentPage = parseInt(params.get("p")) || 1;
         }
+        generateSkeletonConfig();
         fetchWindowedBlips(currentPage);
 
         updateInterval = setInterval(() => {
@@ -112,7 +128,12 @@
     <p>~Ethan</p>
     <div id="blips">
         {#if loading}
-            <p>Loading blips...</p>
+            {#each skeletonConfig as config, i}
+                <BlipSkeleton
+                    lineCount={config.lineCount}
+                    lineWidths={config.lineWidths}
+                />
+            {/each}
         {:else if error}
             <p>Error loading blips: {error.message}</p>
         {:else}
