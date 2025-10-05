@@ -12,3 +12,11 @@
 {@render children?.()}
 </main>
 <ethmarks-footer></ethmarks-footer>
+
+<style>
+    main {
+        @media (min-width: 768px) {
+            --main-margin-sides: 16vw;
+        }
+    }
+</style>
