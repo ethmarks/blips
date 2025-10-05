@@ -2,6 +2,7 @@
     import { getBlips } from "../lib/sanity";
     import { onMount, onDestroy } from "svelte";
     import { browser } from "$app/environment";
+    import { goto } from "$app/navigation";
     import Blip from "../lib/components/blip.svelte";
 
     let blips = [];
@@ -12,13 +13,36 @@
     let hasMore = false;
     const pageSize = 20;
 
-    async function fetchBlips(page = 1) {
-        try {
-            loading = true;
-            const result = await getBlips(true, page, pageSize);
+    // Cache for windowed blips data
+    let blipCache = [];
+    let cacheStartPage = 0;
+    let cacheEndPage = 0;
 
-            blips = result.blips;
-            hasMore = result.hasMore;
+    async function fetchWindowedBlips(page = 1) {
+        // Check if we have the current page in cache
+        if (page >= cacheStartPage && page <= cacheEndPage) {
+            // Load instantly from cache
+            loadPageFromCache(page);
+        } else {
+            loading = true;
+        }
+
+        // Always fetch the window (prev + current + next pages)
+        const startPage = Math.max(1, page - 1);
+        const windowSize = pageSize * 3; // 3 pages worth of blips
+        const windowStartIndex = (startPage - 1) * pageSize;
+
+        try {
+            const result = await getBlips(true, startPage, windowSize);
+
+            // Cache the windowed data
+            blipCache = result.blips;
+            cacheStartPage = startPage;
+            cacheEndPage =
+                startPage + Math.floor(result.blips.length / pageSize);
+
+            // Load the requested page from the fresh cache
+            loadPageFromCache(page);
 
             loading = false;
             error = null;
@@ -28,17 +52,50 @@
         }
     }
 
+    function loadPageFromCache(page) {
+        if (page < cacheStartPage || page > cacheEndPage) return;
+
+        const pageIndex = page - cacheStartPage;
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+
+        blips = blipCache.slice(startIndex, endIndex);
+
+        // Calculate if there are more pages beyond our cache
+        const totalCachedPages = Math.ceil(blipCache.length / pageSize);
+        const isLastCachedPage = pageIndex >= totalCachedPages - 1;
+        hasMore = !isLastCachedPage || blipCache.length === pageSize * 3;
+    }
+
+    function navigateToPage(newPage) {
+        if (newPage === currentPage) return;
+
+        currentPage = newPage;
+
+        // Update URL
+        const url = new URL(window.location);
+        if (newPage === 1) {
+            url.searchParams.delete("p");
+        } else {
+            url.searchParams.set("p", newPage.toString());
+        }
+        goto(url.pathname + url.search, { replaceState: false });
+
+        fetchWindowedBlips(newPage);
+    }
+
     onMount(() => {
         if (browser) {
             const params = new URLSearchParams(window.location.search);
             currentPage = parseInt(params.get("p")) || 1;
         }
-        fetchBlips(currentPage);
+        fetchWindowedBlips(currentPage);
 
         updateInterval = setInterval(() => {
             // only auto-update on first page
             if (currentPage === 1) {
-                fetchBlips(1);
+                blipCache = [];
+                fetchWindowedBlips(1);
             }
         }, 60000);
     });
@@ -78,7 +135,8 @@
                     <a
                         href="/?p={currentPage - 1}"
                         id="back-link"
-                        data-sveltekit-reload
+                        on:click|preventDefault={() =>
+                            navigateToPage(currentPage - 1)}
                     >
                         ← Previous page
                     </a>
@@ -87,7 +145,8 @@
                     <a
                         href="/?p={currentPage + 1}"
                         id="more-link"
-                        data-sveltekit-reload
+                        on:click|preventDefault={() =>
+                            navigateToPage(currentPage + 1)}
                     >
                         Next page →
                     </a>
