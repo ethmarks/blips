@@ -11,6 +11,18 @@
         return marked(markdown || "");
     }
 
+    function getAbsoluteDate(date) {
+      const options = {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          hour12: "true",
+          minute: "numeric",
+      };
+      return date.toLocaleString("en-GB", options);
+    }
+
     function parseCreatedAt(createdAtDate, now = currentTime) {
         const minutesElapsed = Math.floor(
             (now - createdAtDate.getTime()) / 60000,
@@ -25,15 +37,7 @@
             const remainingMinutes = minutesElapsed % 60;
             return `${hoursElapsed}h ${remainingMinutes}m ago`;
         } else {
-            const options = {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                hour12: "true",
-                minute: "numeric",
-            };
-            return createdAtDate.toLocaleString("en-GB", options);
+          return getAbsoluteDate(createdAtDate);
         }
     }
 
@@ -58,7 +62,10 @@
 <hr />
 <div class="blip">
     <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
-    <time datetime={createdAtDate.toISOString()} class="blip-time">
+    <time
+        datetime={createdAtDate.toISOString()}
+        class="blip-time"
+        title={getAbsoluteDate(createdAtDate)}>
         {timeDisplay}
     </time>
 </div>
