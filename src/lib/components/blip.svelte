@@ -12,22 +12,23 @@
     }
 
     function getAbsoluteDate(date) {
-      const options = {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          hour12: "true",
-          minute: "numeric",
-      };
-      return date.toLocaleString("en-GB", options);
+        const options = {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            hour12: "true",
+            minute: "numeric",
+        };
+        return date.toLocaleString("en-GB", options);
     }
 
     function parseCreatedAt(createdAtDate, now = currentTime) {
         const minutesElapsed = Math.floor(
             (now - createdAtDate.getTime()) / 60000,
         );
-        const sameDay = createdAtDate.toDateString() === new Date(now).toDateString();
+        const sameDay =
+            createdAtDate.toDateString() === new Date(now).toDateString();
         if (minutesElapsed < 1) {
             return "now";
         } else if (minutesElapsed <= 60) {
@@ -37,7 +38,7 @@
             const remainingMinutes = minutesElapsed % 60;
             return `${hoursElapsed}h ${remainingMinutes}m ago`;
         } else {
-          return getAbsoluteDate(createdAtDate);
+            return getAbsoluteDate(createdAtDate);
         }
     }
 
@@ -65,7 +66,8 @@
     <time
         datetime={createdAtDate.toISOString()}
         class="blip-time"
-        title={getAbsoluteDate(createdAtDate)}>
+        title={getAbsoluteDate(createdAtDate)}
+    >
         {timeDisplay}
     </time>
 </div>

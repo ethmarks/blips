@@ -1,7 +1,7 @@
 <script>
     import { getBlips } from "../lib/sanity";
     import { onMount, onDestroy } from "svelte";
-    import Blip from '../lib/components/blip.svelte';
+    import Blip from "../lib/components/blip.svelte";
 
     let blips = [];
     let loading = true;
@@ -14,8 +14,13 @@
             const newBlips = await getBlips();
 
             // Only update blips if there are new ones or if this is the first load
-            if (blips.length === 0 || newBlips.length !== blips.length ||
-                (newBlips.length > 0 && blips.length > 0 && newBlips[0]._id !== blips[0]._id)) {
+            if (
+                blips.length === 0 ||
+                newBlips.length !== blips.length ||
+                (newBlips.length > 0 &&
+                    blips.length > 0 &&
+                    newBlips[0]._id !== blips[0]._id)
+            ) {
                 blips = newBlips;
             }
 
