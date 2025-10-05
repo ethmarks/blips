@@ -6,14 +6,16 @@
     import Blip from "../lib/components/blip.svelte";
     import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
 
+    const pageSize = 20;
+    const useSample = false; // for testing purposes only
+    const updateInterval = 60000;
+
     let blips = [];
     let loading = true;
     let error = null;
-    let updateInterval;
+    let updateTimer;
     let currentPage = 1;
     let hasMore = false;
-    const pageSize = 20;
-    const useSample = false; // for testing purposes only
     let skeletonConfig = [];
 
     // Simple cache: map of page number to blips
@@ -120,17 +122,17 @@
         generateSkeletonConfig();
         fetchWindowedBlips(currentPage);
 
-        updateInterval = setInterval(() => {
+        updateTimer = setInterval(() => {
             // only auto-update on first page
             if (currentPage === 1) {
                 silentAutoUpdate();
             }
-        }, 600);
+        }, updateInterval);
     });
 
     onDestroy(() => {
-        if (updateInterval) {
-            clearInterval(updateInterval);
+        if (updateTimer) {
+            clearInterval(updateTimer);
         }
     });
 </script>
