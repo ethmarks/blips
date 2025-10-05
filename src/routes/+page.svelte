@@ -62,6 +62,28 @@
         }
     }
 
+    async function silentAutoUpdate() {
+        try {
+            // Fetch fresh data for page 1 without affecting loading state
+            const result = await getBlips(useSample, 1, pageSize);
+
+            // Update cache with fresh data
+            pageCache.set(1, {
+                blips: result.blips,
+                hasMore: result.hasMore,
+            });
+
+            // If we're currently on page 1, update the display
+            if (currentPage === 1) {
+                blips = result.blips;
+                hasMore = result.hasMore;
+            }
+        } catch (err) {
+            // Silently fail - don't update error state during auto-update
+            console.warn("Auto-update failed:", err);
+        }
+    }
+
     function generateSkeletonConfig() {
         const count = Math.floor(Math.random() * 11) + 10; // 10-20 skeletons
         skeletonConfig = Array.from({ length: count }, () => ({
@@ -101,10 +123,9 @@
         updateInterval = setInterval(() => {
             // only auto-update on first page
             if (currentPage === 1) {
-                pageCache.clear(); // Clear cache for fresh data
-                fetchWindowedBlips(1);
+                silentAutoUpdate();
             }
-        }, 60000);
+        }, 600);
     });
 
     onDestroy(() => {
