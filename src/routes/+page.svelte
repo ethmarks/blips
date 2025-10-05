@@ -1,18 +1,61 @@
 <script>
     import { marked } from "marked";
     import { getBlips } from "../lib/sanity";
+    import { onMount, onDestroy } from "svelte";
 
-    let blipsPromise = getBlips();
+    let blips = [];
+    let loading = true;
+    let error = null;
+    let updateInterval;
+    let timeUpdateInterval;
+    let currentTime = Date.now();
+
+    async function fetchBlips() {
+        try {
+            const newBlips = await getBlips();
+
+            // Only update blips if there are new ones or if this is the first load
+            if (blips.length === 0 || newBlips.length !== blips.length ||
+                (newBlips.length > 0 && blips.length > 0 && newBlips[0]._id !== blips[0]._id)) {
+                blips = newBlips;
+            }
+
+            loading = false;
+            error = null;
+        } catch (err) {
+            error = err;
+            loading = false;
+        }
+    }
+
+    function updateCurrentTime() {
+        currentTime = Date.now();
+    }
+
+    onMount(() => {
+        fetchBlips();
+        updateInterval = setInterval(fetchBlips, 60000);
+        timeUpdateInterval = setInterval(updateCurrentTime, 30000);
+    });
+
+    onDestroy(() => {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+        }
+        if (timeUpdateInterval) {
+            clearInterval(timeUpdateInterval);
+        }
+    });
 
     function renderMarkdown(markdown) {
         return marked(markdown || "");
     }
 
-    function parseCreatedAt(createdAtDate) {
+    function parseCreatedAt(createdAtDate, now = currentTime) {
         const minutesElapsed = Math.floor(
-            (Date.now() - createdAtDate.getTime()) / 60000,
+            (now - createdAtDate.getTime()) / 60000,
         );
-        const sameDay = createdAtDate.toDateString() === new Date().toDateString();
+        const sameDay = createdAtDate.toDateString() === new Date(now).toDateString();
         if (minutesElapsed < 1) {
             return "now";
         } else if (minutesElapsed <= 60) {
@@ -48,20 +91,20 @@
     </p>
     <p>~Ethan</p>
     <div id="blips">
-        {#await blipsPromise}
+        {#if loading}
             <p>Loading blips...</p>
-        {:then blips}
+        {:else if error}
+            <p>Error loading blips: {error.message}</p>
+        {:else}
             {#each blips as blip}
                 <hr />
                 <div>{@html renderMarkdown(blip.content)}</div>
                 {@const createdAtDate = new Date(blip._createdAt)}
                 <time datetime={createdAtDate.toISOString()} class="blip-time">
-                    {parseCreatedAt(createdAtDate)}
+                    {parseCreatedAt(createdAtDate, currentTime)}
                 </time>
             {/each}
-        {:catch error}
-            <p>Error loading blips: {error.message}</p>
-        {/await}
+        {/if}
     </div>
 </article>
 
