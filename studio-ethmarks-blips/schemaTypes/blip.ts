@@ -17,10 +17,10 @@ export const blip = defineType({
     },
     prepare(selection) {
       const { content } = selection;
-      const firstLine = content ? content.split('\n')[0] : 'Empty';
+      const firstSentence = content ? content.split(/[.!?]/)[0] : 'Empty';
 
       return {
-        title: firstLine.length > 60 ? firstLine.substring(0, 60) + '...' : firstLine,
+        title: firstSentence.length > 60 ? firstSentence.substring(0, 60) + '...' : firstSentence,
       };
     }
   }
