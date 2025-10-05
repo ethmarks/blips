@@ -11,7 +11,8 @@
     let updateInterval;
     let currentPage = 1;
     let hasMore = false;
-    const pageSize = 5;
+    const pageSize = 20;
+    const useSample = false; // for testing purposes only
 
     // Simple cache: map of page number to blips
     const pageCache = new Map();
@@ -35,7 +36,7 @@
             // Fetch each page in the window
             for (let p = startPage; p <= endPage; p++) {
                 if (!pageCache.has(p)) {
-                    const result = await getBlips(true, p, pageSize);
+                    const result = await getBlips(useSample, p, pageSize);
                     pageCache.set(p, {
                         blips: result.blips,
                         hasMore: result.hasMore,
