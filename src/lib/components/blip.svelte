@@ -55,17 +55,27 @@
     });
 </script>
 
+<hr />
 <div class="blip">
-    <hr />
-    <div>{@html renderMarkdown(blip.content)}</div>
+    <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
     <time datetime={createdAtDate.toISOString()} class="blip-time">
         {timeDisplay}
     </time>
 </div>
 
 <style>
+    .blip {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-between;
+    }
+    .blip-content :global(p:first-child) {
+        margin-top: 0;
+    }
     .blip-time {
-        font-size: 0.8rem;
         color: gray;
+        font-size: 0.8rem;
+        text-align: right;
+        white-space: pre;
     }
 </style>
