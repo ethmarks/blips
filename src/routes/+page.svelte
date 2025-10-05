@@ -12,10 +12,15 @@
         const minutesElapsed = Math.floor(
             (Date.now() - createdAtDate.getTime()) / 60000,
         );
+        const sameDay = createdAtDate.toDateString() === new Date().toDateString();
         if (minutesElapsed < 1) {
             return "now";
         } else if (minutesElapsed <= 60) {
-            return minutesElapsed + "m ago";
+            return `${minutesElapsed}m ago`;
+        } else if (sameDay) {
+            const hoursElapsed = Math.floor(minutesElapsed / 60);
+            const remainingMinutes = minutesElapsed % 60;
+            return `${hoursElapsed}h ${remainingMinutes}m ago`;
         } else {
             const options = {
                 year: "numeric",
