@@ -11,38 +11,43 @@
     let updateInterval;
     let currentPage = 1;
     let hasMore = false;
-    const pageSize = 20;
+    const pageSize = 5;
 
-    // Cache for windowed blips data
-    let blipCache = [];
-    let cacheStartPage = 0;
-    let cacheEndPage = 0;
+    // Simple cache: map of page number to blips
+    const pageCache = new Map();
 
     async function fetchWindowedBlips(page = 1) {
-        // Check if we have the current page in cache
-        if (page >= cacheStartPage && page <= cacheEndPage) {
+        // Check if we have the current page cached
+        if (pageCache.has(page)) {
             // Load instantly from cache
-            loadPageFromCache(page);
+            blips = pageCache.get(page).blips;
+            hasMore = pageCache.get(page).hasMore;
+            loading = false;
         } else {
             loading = true;
         }
 
-        // Always fetch the window (prev + current + next pages)
+        // Fetch a window: prev page + current page + next page
         const startPage = Math.max(1, page - 1);
-        const windowSize = pageSize * 3; // 3 pages worth of blips
-        const windowStartIndex = (startPage - 1) * pageSize;
+        const endPage = page + 1;
 
         try {
-            const result = await getBlips(true, startPage, windowSize);
+            // Fetch each page in the window
+            for (let p = startPage; p <= endPage; p++) {
+                if (!pageCache.has(p)) {
+                    const result = await getBlips(true, p, pageSize);
+                    pageCache.set(p, {
+                        blips: result.blips,
+                        hasMore: result.hasMore,
+                    });
+                }
+            }
 
-            // Cache the windowed data
-            blipCache = result.blips;
-            cacheStartPage = startPage;
-            cacheEndPage =
-                startPage + Math.floor(result.blips.length / pageSize);
-
-            // Load the requested page from the fresh cache
-            loadPageFromCache(page);
+            // Update display with current page data
+            if (pageCache.has(page)) {
+                blips = pageCache.get(page).blips;
+                hasMore = pageCache.get(page).hasMore;
+            }
 
             loading = false;
             error = null;
@@ -50,21 +55,6 @@
             error = err;
             loading = false;
         }
-    }
-
-    function loadPageFromCache(page) {
-        if (page < cacheStartPage || page > cacheEndPage) return;
-
-        const pageIndex = page - cacheStartPage;
-        const startIndex = pageIndex * pageSize;
-        const endIndex = startIndex + pageSize;
-
-        blips = blipCache.slice(startIndex, endIndex);
-
-        // Calculate if there are more pages beyond our cache
-        const totalCachedPages = Math.ceil(blipCache.length / pageSize);
-        const isLastCachedPage = pageIndex >= totalCachedPages - 1;
-        hasMore = !isLastCachedPage || blipCache.length === pageSize * 3;
     }
 
     function navigateToPage(newPage) {
@@ -94,7 +84,7 @@
         updateInterval = setInterval(() => {
             // only auto-update on first page
             if (currentPage === 1) {
-                blipCache = [];
+                pageCache.clear(); // Clear cache for fresh data
                 fetchWindowedBlips(1);
             }
         }, 60000);
