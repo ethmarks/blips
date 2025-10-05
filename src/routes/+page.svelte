@@ -15,7 +15,7 @@
     async function fetchBlips(page = 1) {
         try {
             loading = true;
-            const result = await getBlips(false, page, pageSize);
+            const result = await getBlips(true, page, pageSize);
 
             blips = result.blips;
             hasMore = result.hasMore;
@@ -74,15 +74,6 @@
             <hr />
 
             <nav>
-                {#if hasMore}
-                    <a
-                        href="/?p={currentPage + 1}"
-                        id="more-link"
-                        data-sveltekit-reload
-                    >
-                        Next page →
-                    </a>
-                {/if}
                 {#if currentPage > 1}
                     <a
                         href="/?p={currentPage - 1}"
@@ -90,6 +81,15 @@
                         data-sveltekit-reload
                     >
                         ← Previous page
+                    </a>
+                {/if}
+                {#if hasMore}
+                    <a
+                        href="/?p={currentPage + 1}"
+                        id="more-link"
+                        data-sveltekit-reload
+                    >
+                        Next page →
                     </a>
                 {/if}
             </nav>
@@ -104,8 +104,17 @@
     }
 
     nav {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row-reverse;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: 1fr;
+
+        #back-link {
+            grid-column: 1;
+            justify-self: start;
+        }
+        #more-link {
+            grid-column: 3;
+            justify-self: end;
+        }
     }
 </style>
