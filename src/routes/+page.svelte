@@ -1,14 +1,13 @@
 <script>
-    import { marked } from "marked";
     import { getBlips } from "../lib/sanity";
     import { onMount, onDestroy } from "svelte";
+    import Blip from '../lib/components/blip.svelte';
 
     let blips = [];
     let loading = true;
     let error = null;
     let updateInterval;
     let timeUpdateInterval;
-    let currentTime = Date.now();
 
     async function fetchBlips() {
         try {
@@ -28,54 +27,16 @@
         }
     }
 
-    function updateCurrentTime() {
-        currentTime = Date.now();
-    }
-
     onMount(() => {
         fetchBlips();
         updateInterval = setInterval(fetchBlips, 60000);
-        timeUpdateInterval = setInterval(updateCurrentTime, 30000);
     });
 
     onDestroy(() => {
         if (updateInterval) {
             clearInterval(updateInterval);
         }
-        if (timeUpdateInterval) {
-            clearInterval(timeUpdateInterval);
-        }
     });
-
-    function renderMarkdown(markdown) {
-        return marked(markdown || "");
-    }
-
-    function parseCreatedAt(createdAtDate, now = currentTime) {
-        const minutesElapsed = Math.floor(
-            (now - createdAtDate.getTime()) / 60000,
-        );
-        const sameDay = createdAtDate.toDateString() === new Date(now).toDateString();
-        if (minutesElapsed < 1) {
-            return "now";
-        } else if (minutesElapsed <= 60) {
-            return `${minutesElapsed}m ago`;
-        } else if (sameDay) {
-            const hoursElapsed = Math.floor(minutesElapsed / 60);
-            const remainingMinutes = minutesElapsed % 60;
-            return `${hoursElapsed}h ${remainingMinutes}m ago`;
-        } else {
-            const options = {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                hour12: "true",
-                minute: "numeric",
-            };
-            return createdAtDate.toLocaleString("en-GB", options);
-        }
-    }
 </script>
 
 <h1 class="animated">Blips</h1>
@@ -97,12 +58,7 @@
             <p>Error loading blips: {error.message}</p>
         {:else}
             {#each blips as blip}
-                <hr />
-                <div>{@html renderMarkdown(blip.content)}</div>
-                {@const createdAtDate = new Date(blip._createdAt)}
-                <time datetime={createdAtDate.toISOString()} class="blip-time">
-                    {parseCreatedAt(createdAtDate, currentTime)}
-                </time>
+                <Blip {blip} />
             {/each}
         {/if}
     </div>
@@ -112,9 +68,5 @@
     .blip-definition {
         font-weight: 600;
         font-size: 1.4rem;
-    }
-    .blip-time {
-        font-size: 0.8rem;
-        color: gray;
     }
 </style>
