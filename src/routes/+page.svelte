@@ -1,28 +1,24 @@
 <script>
     import { getBlips } from "../lib/sanity";
     import { onMount, onDestroy } from "svelte";
+    import { browser } from "$app/environment";
     import Blip from "../lib/components/blip.svelte";
 
     let blips = [];
     let loading = true;
     let error = null;
     let updateInterval;
-    let timeUpdateInterval;
+    let currentPage = 1;
+    let hasMore = false;
+    const pageSize = 20;
 
-    async function fetchBlips() {
+    async function fetchBlips(page = 1) {
         try {
-            const newBlips = await getBlips();
+            loading = true;
+            const result = await getBlips(false, page, pageSize);
 
-            // Only update blips if there are new ones or if this is the first load
-            if (
-                blips.length === 0 ||
-                newBlips.length !== blips.length ||
-                (newBlips.length > 0 &&
-                    blips.length > 0 &&
-                    newBlips[0]._id !== blips[0]._id)
-            ) {
-                blips = newBlips;
-            }
+            blips = result.blips;
+            hasMore = result.hasMore;
 
             loading = false;
             error = null;
@@ -33,8 +29,18 @@
     }
 
     onMount(() => {
-        fetchBlips();
-        updateInterval = setInterval(fetchBlips, 60000);
+        if (browser) {
+            const params = new URLSearchParams(window.location.search);
+            currentPage = parseInt(params.get("p")) || 1;
+        }
+        fetchBlips(currentPage);
+
+        updateInterval = setInterval(() => {
+            // only auto-update on first page
+            if (currentPage === 1) {
+                fetchBlips(1);
+            }
+        }, 60000);
     });
 
     onDestroy(() => {
@@ -65,6 +71,28 @@
             {#each blips as blip}
                 <Blip {blip} />
             {/each}
+            <hr />
+
+            <nav>
+                {#if hasMore}
+                    <a
+                        href="/?p={currentPage + 1}"
+                        id="more-link"
+                        data-sveltekit-reload
+                    >
+                        Next page →
+                    </a>
+                {/if}
+                {#if currentPage > 1}
+                    <a
+                        href="/?p={currentPage - 1}"
+                        id="back-link"
+                        data-sveltekit-reload
+                    >
+                        ← Previous page
+                    </a>
+                {/if}
+            </nav>
         {/if}
     </div>
 </article>
@@ -73,5 +101,11 @@
     .blip-definition {
         font-weight: 600;
         font-size: 1.4rem;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row-reverse;
     }
 </style>
