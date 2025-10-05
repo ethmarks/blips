@@ -13,7 +13,7 @@
     ></script>
 </svelte:head>
 
-<ethmarks-header></ethmarks-header>
+<ethmarks-header active="blips"></ethmarks-header>
 <main>
     {@render children?.()}
 </main>
