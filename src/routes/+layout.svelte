@@ -3,6 +3,28 @@
 </script>
 
 <svelte:head>
+    <title>Blips</title>
+    <meta name="title" content="Blips" />
+    <meta
+        name="description"
+        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
+    />
+    <meta name="author" content="Ethan" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Blips" />
+    <meta
+        property="og:description"
+        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
+    />
+    <meta property="og:site_name" content="Blips" />
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Blips" />
+    <meta
+        property="twitter:description"
+        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
+    />
+    <link rel="canonical" href="https://ethmarks.github.io/blips" />
+
     <link
         rel="stylesheet"
         href="https://ethmarks.github.io/css/global.min.css"
