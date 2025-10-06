@@ -78,8 +78,11 @@
         flex-direction: column-reverse;
         justify-content: space-between;
     }
-    .blip-content :global(p:first-child) {
-        margin-top: 0;
+    .blip-content {
+        :global(p:first-child),
+        :global(blockquote:first-child) {
+            margin-top: 0;
+        }
     }
     .blip-time {
         color: gray;
