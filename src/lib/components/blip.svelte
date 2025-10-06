@@ -79,8 +79,7 @@
         justify-content: space-between;
     }
     .blip-content {
-        :global(p:first-child),
-        :global(blockquote:first-child) {
+        > :global(:first-child) {
             margin-top: 0;
         }
     }
