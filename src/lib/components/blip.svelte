@@ -1,6 +1,7 @@
 <script>
     import { marked } from "marked";
     import { onMount, onDestroy } from "svelte";
+    import { postProcessCitations } from "$lib/blockquoteCitations.js";
 
     export let blip;
 
@@ -8,7 +9,9 @@
     let timeUpdateInterval;
 
     function renderMarkdown(markdown) {
-        return marked(markdown || "");
+        let html = marked(markdown || "");
+        html = postProcessCitations(html);
+        return html;
     }
 
     function getAbsoluteDate(date) {
