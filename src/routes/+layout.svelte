@@ -29,6 +29,10 @@
         rel="stylesheet"
         href="https://ethmarks.github.io/css/global.min.css"
     />
+    <link
+        rel="stylesheet"
+        href="https://ethmarks.github.io/css/blips.min.css"
+    />
     <script
         src="https://ethmarks.github.io/js/ethmarks-components.js"
         defer
