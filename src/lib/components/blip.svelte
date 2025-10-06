@@ -84,7 +84,7 @@
         }
     }
     .blip-time {
-        color: gray;
+        color: #a3a3a3;
         font-size: 0.8rem;
         text-align: right;
         white-space: pre;
