@@ -151,7 +151,6 @@
         </p>
         <p>~Ethan</p>
     </div>
-    <hr />
     <div id="blips">
         {#if loading}
             {#each skeletonConfig as config, i}
@@ -216,22 +215,5 @@
             grid-column: 3;
             justify-self: end;
         }
-    }
-
-    hr {
-        --color-separator: 103, 212, 197;
-        border: none;
-        border-top: 2px solid rgba(var(--color-separator), 0.6);
-        border-bottom: 2px solid rgba(var(--color-separator), 0.6);
-        height: 10px;
-        position: relative;
-        overflow: visible;
-        background: repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 2px,
-            rgba(var(--color-separator), 0.2) 4px,
-            rgba(var(--color-separator), 0.2) 4px
-        );
     }
 </style>
