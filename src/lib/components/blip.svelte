@@ -81,11 +81,22 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        border-bottom: 2px solid #67d4c5;
+        margin: 1rem;
     }
+
+    .blip-content:not(:has(> :only-child:is(blockquote, pre))) {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
     .blip-content {
         > :global(:first-child) {
             margin-top: 0;
+        }
+        > :global(:last-child) {
+            margin-bottom: 0;
         }
     }
     .blip-time {
