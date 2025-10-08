@@ -227,6 +227,12 @@
         color: #c7c7c7;
     }
 
+    #blips {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
     nav {
         display: grid;
         grid-template-columns: auto 1fr auto;

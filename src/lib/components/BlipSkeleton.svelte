@@ -23,7 +23,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        margin: 1rem;
+        margin: 0 1rem;
     }
 
     .blip-content {
