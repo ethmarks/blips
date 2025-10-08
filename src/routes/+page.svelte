@@ -139,16 +139,18 @@
 
 <h1 class="animated">Blips</h1>
 <article>
-    <p class="blip-definition">Blip (noun) - a ping of activity on a radar</p>
-    <p>
-        My Blips are basically my blog. Not to be confused with my <a
-            href="https://ethmarks.github.io/posts/">Posts</a
-        >, which are long-form and semi-professional articles. Think of Blips as
-        Ethan-flavoured Tumblr. I blip about what I'm up to or about random
-        interesting things I've found that aren't substantial enough to merit a
-        full Post.
-    </p>
-    <p>~Ethan</p>
+    <p id="definition">Blip (noun) - a ping of activity on a radar</p>
+    <div id="intro-text">
+        <p>
+            My Blips are basically my blog. Not to be confused with my <a
+                href="https://ethmarks.github.io/posts/">Posts</a
+            >, which are long-form and semi-professional articles. Think of
+            Blips as Ethan-flavoured Tumblr. I blip about what I'm up to or
+            about random interesting things I've found that aren't substantial
+            enough to merit a full Post.
+        </p>
+        <p>~Ethan</p>
+    </div>
     <div id="blips">
         {#if loading}
             {#each skeletonConfig as config, i}
@@ -192,9 +194,13 @@
 </article>
 
 <style>
-    .blip-definition {
+    #definition {
         font-weight: 600;
         font-size: 1.4rem;
+    }
+
+    #intro-text {
+        color: #a3a3a3;
     }
 
     nav {
