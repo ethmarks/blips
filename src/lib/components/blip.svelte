@@ -2,6 +2,7 @@
     import { marked } from "marked";
     import { onMount, onDestroy } from "svelte";
     import { postProcessCitations } from "$lib/blockquoteCitations.js";
+    import { postProcessExternalLinks } from "$lib/linkBlanker.js";
 
     export let blip;
 
@@ -11,6 +12,7 @@
     function renderMarkdown(markdown) {
         let html = marked(markdown || "");
         html = postProcessCitations(html);
+        html = postProcessExternalLinks(html);
         return html;
     }
 
