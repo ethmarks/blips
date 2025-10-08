@@ -9,7 +9,6 @@
     }));
 </script>
 
-<hr />
 <div class="blip skeleton" class:animate>
     <div class="blip-content">
         {#each lines as line}
@@ -18,6 +17,7 @@
     </div>
     <div class="blip-time skeleton-time"></div>
 </div>
+<hr />
 
 <style>
     .blip {
@@ -87,5 +87,10 @@
     .skeleton-line,
     .skeleton-time {
         background-size: 200% 100%;
+    }
+
+    hr {
+        border: none;
+        border-bottom: 2px solid #67d4c5;
     }
 </style>

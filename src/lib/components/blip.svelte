@@ -65,7 +65,6 @@
     });
 </script>
 
-<hr />
 <div class="blip">
     <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
     <time
@@ -82,6 +81,7 @@
         display: flex;
         flex-direction: column-reverse;
         justify-content: space-between;
+        border-bottom: 2px solid #67d4c5;
     }
     .blip-content {
         > :global(:first-child) {

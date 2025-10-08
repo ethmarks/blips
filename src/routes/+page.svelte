@@ -151,6 +151,7 @@
         </p>
         <p>~Ethan</p>
     </div>
+    <hr />
     <div id="blips">
         {#if loading}
             {#each skeletonConfig as config, i}
@@ -165,7 +166,6 @@
             {#each blips as blip}
                 <Blip {blip} />
             {/each}
-            <hr />
 
             <nav>
                 {#if currentPage > 1}
@@ -216,5 +216,25 @@
             grid-column: 3;
             justify-self: end;
         }
+    }
+
+    hr {
+        border: none;
+        border-bottom: 2px solid #67d4c5;
+        position: relative;
+        overflow: visible;
+    }
+
+    hr::before {
+        content: "#";
+        font-size: 1.7rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #1e1e1e;
+        padding: 0 8px;
+        color: #67d4c5;
+        font-weight: bold;
     }
 </style>
