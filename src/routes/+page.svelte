@@ -138,7 +138,7 @@
 </script>
 
 <h1 class="animated">Blips</h1>
-<article>
+<article class="animated">
     <p id="definition">Blip (noun) - a ping of activity on a radar</p>
     <div id="intro-text">
         <p>
