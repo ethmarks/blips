@@ -28,27 +28,81 @@
         return date.toLocaleString("en-GB", options);
     }
 
-    function parseCreatedAt(createdAtDate, now = currentTime) {
-        const minutesElapsed = Math.floor(
-            (now - createdAtDate.getTime()) / 60000,
-        );
-        const sameDay =
-            createdAtDate.toDateString() === new Date(now).toDateString();
-        if (minutesElapsed < 1) {
+    function getRelativeDate(createdAtDate, now = currentTime) {
+        const diffMinutes = (now - createdAtDate.getTime()) / 60000;
+        const diffHours = diffMinutes / 60;
+        const diffDays = diffHours / 24;
+        const diffWeeks = diffDays / 7;
+        const diffMonths = diffDays / 30;
+        const diffYears = diffDays / 365;
+
+        // < 1 minute: "now"
+        if (diffMinutes < 1) {
             return "now";
-        } else if (minutesElapsed <= 60) {
-            return `${minutesElapsed}m ago`;
-        } else if (sameDay) {
-            const hoursElapsed = Math.floor(minutesElapsed / 60);
-            const remainingMinutes = minutesElapsed % 60;
-            return `${hoursElapsed}h ${remainingMinutes}m ago`;
-        } else {
-            return getAbsoluteDate(createdAtDate);
         }
+
+        // < 1 hour: "4m"
+        if (diffHours < 1) {
+            return `${Math.floor(diffMinutes)}m`;
+        }
+
+        // < 1 day (must be *same* day): "4hr 4m"
+        const nowDate = new Date(now);
+        const isSameDay =
+            createdAtDate.getDate() === nowDate.getDate() &&
+            createdAtDate.getMonth() === nowDate.getMonth() &&
+            createdAtDate.getFullYear() === nowDate.getFullYear();
+
+        if (diffDays < 1 && isSameDay) {
+            const hours = Math.floor(diffHours);
+            const remainingMinutes = Math.floor(diffMinutes % 60);
+            if (remainingMinutes === 0) {
+                return `${hours}hr`;
+            }
+            return `${hours}hr ${remainingMinutes}m`;
+        }
+
+        // < 2 days: "yesterday"
+        if (diffDays < 2) {
+            return "yesterday";
+        }
+
+        // < 1 week: "4d"
+        if (diffWeeks < 1) {
+            return `${Math.floor(diffDays)}d`;
+        }
+
+        // < 2 week: "last week"
+        if (diffWeeks < 2) {
+            return "last week";
+        }
+
+        // < 1 month: "4w"
+        if (diffMonths < 1) {
+            return `${Math.floor(diffWeeks)}w`;
+        }
+
+        // < 2 month: "last month"
+        if (diffMonths < 2) {
+            return "last month";
+        }
+
+        // < 1 year: "4mth"
+        if (diffYears < 1) {
+            return `${Math.floor(diffMonths)}mth`;
+        }
+
+        // < 2 year: "last year"
+        if (diffYears < 2) {
+            return "last year";
+        }
+
+        // else: "4yr"
+        return `${Math.floor(diffYears)}yr`;
     }
 
     $: createdAtDate = new Date(blip._createdAt);
-    $: timeDisplay = parseCreatedAt(createdAtDate, currentTime);
+    $: timeDisplay = getRelativeDate(createdAtDate, currentTime);
 
     function updateCurrentTime() {
         currentTime = Date.now();
