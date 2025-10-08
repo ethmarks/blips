@@ -220,21 +220,17 @@
 
     hr {
         border: none;
-        border-bottom: 2px solid #67d4c5;
+        border-top: 1px solid #67d4c5;
+        border-bottom: 1px solid #67d4c5;
+        height: 10px;
         position: relative;
         overflow: visible;
-    }
-
-    hr::before {
-        content: "#";
-        font-size: 1.7rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #1e1e1e;
-        padding: 0 8px;
-        color: #67d4c5;
-        font-weight: bold;
+        background: repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 6px,
+            rgba(103, 212, 197, 0.3) 6px,
+            rgba(103, 212, 197, 0.3) 8px
+        );
     }
 </style>
