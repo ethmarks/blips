@@ -200,7 +200,7 @@
     }
 
     #intro-text {
-        color: #a3a3a3;
+        color: #c7c7c7;
     }
 
     nav {
