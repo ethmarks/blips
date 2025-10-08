@@ -16,6 +16,10 @@
         return html;
     }
 
+    function getISODate(date) {
+        return date.toISOString();
+    }
+
     function getAbsoluteDate(date) {
         const options = {
             year: "numeric",
@@ -120,13 +124,14 @@
 </script>
 
 <div class="blip">
-    <time
-        datetime={createdAtDate.toISOString()}
-        class="blip-time"
-        title={getAbsoluteDate(createdAtDate)}
-    >
-        {timeDisplay}
-    </time>
+    <div class="time">
+        <time class="relative" datetime={getISODate(createdAtDate)}>
+            {timeDisplay}
+        </time>
+        <time class="absolute" datetime={getISODate(createdAtDate)}>
+            {getAbsoluteDate(createdAtDate)}
+        </time>
+    </div>
     <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
 </div>
 
@@ -153,10 +158,11 @@
             margin-bottom: 0;
         }
     }
-    .blip-time {
+    .time {
         color: #a3a3a3;
         font-size: 0.8rem;
-        text-align: left;
         white-space: pre;
+        display: flex;
+        justify-content: space-between;
     }
 </style>
