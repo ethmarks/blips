@@ -219,18 +219,19 @@
     }
 
     hr {
+        --color-separator: 103, 212, 197;
         border: none;
-        border-top: 1px solid #67d4c5;
-        border-bottom: 1px solid #67d4c5;
+        border-top: 2px solid rgba(var(--color-separator), 0.6);
+        border-bottom: 2px solid rgba(var(--color-separator), 0.6);
         height: 10px;
         position: relative;
         overflow: visible;
         background: repeating-linear-gradient(
             -45deg,
             transparent,
-            transparent 6px,
-            rgba(103, 212, 197, 0.3) 6px,
-            rgba(103, 212, 197, 0.3) 8px
+            transparent 2px,
+            rgba(var(--color-separator), 0.2) 4px,
+            rgba(var(--color-separator), 0.2) 4px
         );
     }
 </style>
