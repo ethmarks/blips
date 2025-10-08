@@ -70,7 +70,7 @@
             #444444 75%
         );
         border-radius: 4px;
-        align-self: flex-end;
+        align-self: flex-start;
         margin-bottom: 0.5rem;
     }
 

@@ -102,7 +102,7 @@
     .blip-time {
         color: #a3a3a3;
         font-size: 0.8rem;
-        text-align: right;
+        text-align: left;
         white-space: pre;
     }
 </style>
