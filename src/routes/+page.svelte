@@ -10,6 +10,14 @@
     const useSample = false; // for testing purposes only
     const updateInterval = 60000;
 
+    // Skeleton configuration constants
+    const SKELETON_COUNT_MIN = 10;
+    const SKELETON_COUNT_MAX = 20;
+    const SKELETON_LINES_MIN = 3;
+    const SKELETON_LINES_MAX = 6;
+    const SKELETON_WIDTH_MIN = 80;
+    const SKELETON_WIDTH_MAX = 100;
+
     let blips = [];
     let loading = true;
     let error = null;
@@ -87,12 +95,29 @@
     }
 
     function generateSkeletonConfig() {
-        const count = Math.floor(Math.random() * 11) + 10; // 10-20 skeletons
+        const count =
+            Math.floor(
+                Math.random() * (SKELETON_COUNT_MAX - SKELETON_COUNT_MIN + 1),
+            ) + SKELETON_COUNT_MIN;
         skeletonConfig = Array.from({ length: count }, () => ({
-            lineCount: Math.floor(Math.random() * 3) + 1, // 1-3 lines
+            lineCount:
+                Math.floor(
+                    Math.random() *
+                        (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
+                ) + SKELETON_LINES_MIN,
             lineWidths: Array.from(
-                { length: Math.floor(Math.random() * 3) + 1 },
-                () => Math.floor(Math.random() * 40) + 40, // 40-80% width
+                {
+                    length:
+                        Math.floor(
+                            Math.random() *
+                                (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
+                        ) + SKELETON_LINES_MIN,
+                },
+                () =>
+                    Math.floor(
+                        Math.random() *
+                            (SKELETON_WIDTH_MAX - SKELETON_WIDTH_MIN + 1),
+                    ) + SKELETON_WIDTH_MIN,
             ),
         }));
     }
