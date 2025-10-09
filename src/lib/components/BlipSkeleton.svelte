@@ -10,20 +10,34 @@
 </script>
 
 <div class="blip skeleton" class:animate>
+    <div class="blip-time skeleton-time"></div>
     <div class="blip-content">
         {#each lines as line}
             <div class="skeleton-line" style="width: {line.width}%"></div>
         {/each}
     </div>
-    <div class="blip-time skeleton-time"></div>
 </div>
-<hr />
 
 <style>
     .blip {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         justify-content: space-between;
+        margin: 0 1rem;
+    }
+
+    .blip-content {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        > :global(:first-child) {
+            margin-top: 0;
+        }
+        > :global(:last-child) {
+            margin-bottom: 0;
+        }
     }
 
     .skeleton {
@@ -56,8 +70,8 @@
             #444444 75%
         );
         border-radius: 4px;
-        align-self: flex-end;
-        margin-top: 0.5rem;
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
     }
 
     @keyframes pulse {
@@ -87,10 +101,5 @@
     .skeleton-line,
     .skeleton-time {
         background-size: 200% 100%;
-    }
-
-    hr {
-        border: none;
-        border-bottom: 2px solid #67d4c5;
     }
 </style>

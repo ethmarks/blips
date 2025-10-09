@@ -10,6 +10,14 @@
     const useSample = false; // for testing purposes only
     const updateInterval = 60000;
 
+    // Skeleton configuration constants
+    const SKELETON_COUNT_MIN = 10;
+    const SKELETON_COUNT_MAX = 20;
+    const SKELETON_LINES_MIN = 3;
+    const SKELETON_LINES_MAX = 6;
+    const SKELETON_WIDTH_MIN = 80;
+    const SKELETON_WIDTH_MAX = 100;
+
     let blips = [];
     let loading = true;
     let error = null;
@@ -87,12 +95,29 @@
     }
 
     function generateSkeletonConfig() {
-        const count = Math.floor(Math.random() * 11) + 10; // 10-20 skeletons
+        const count =
+            Math.floor(
+                Math.random() * (SKELETON_COUNT_MAX - SKELETON_COUNT_MIN + 1),
+            ) + SKELETON_COUNT_MIN;
         skeletonConfig = Array.from({ length: count }, () => ({
-            lineCount: Math.floor(Math.random() * 3) + 1, // 1-3 lines
+            lineCount:
+                Math.floor(
+                    Math.random() *
+                        (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
+                ) + SKELETON_LINES_MIN,
             lineWidths: Array.from(
-                { length: Math.floor(Math.random() * 3) + 1 },
-                () => Math.floor(Math.random() * 40) + 40, // 40-80% width
+                {
+                    length:
+                        Math.floor(
+                            Math.random() *
+                                (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
+                        ) + SKELETON_LINES_MIN,
+                },
+                () =>
+                    Math.floor(
+                        Math.random() *
+                            (SKELETON_WIDTH_MAX - SKELETON_WIDTH_MIN + 1),
+                    ) + SKELETON_WIDTH_MIN,
             ),
         }));
     }
@@ -151,7 +176,6 @@
         </p>
         <p>~Ethan</p>
     </div>
-    <hr />
     <div id="blips">
         {#if loading}
             {#each skeletonConfig as config, i}
@@ -203,6 +227,12 @@
         color: #c7c7c7;
     }
 
+    #blips {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
     nav {
         display: grid;
         grid-template-columns: auto 1fr auto;
@@ -216,25 +246,5 @@
             grid-column: 3;
             justify-self: end;
         }
-    }
-
-    hr {
-        border: none;
-        border-bottom: 2px solid #67d4c5;
-        position: relative;
-        overflow: visible;
-    }
-
-    hr::before {
-        content: "#";
-        font-size: 1.7rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #1e1e1e;
-        padding: 0 8px;
-        color: #67d4c5;
-        font-weight: bold;
     }
 </style>

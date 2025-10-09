@@ -1,5 +1,6 @@
 <script>
     import { marked } from "marked";
+    import { formatDistance } from "date-fns";
     import { onMount, onDestroy } from "svelte";
     import { postProcessCitations } from "$lib/blockquoteCitations.js";
     import { postProcessExternalLinks } from "$lib/linkBlanker.js";
@@ -16,6 +17,10 @@
         return html;
     }
 
+    function getISODate(date) {
+        return date.toISOString();
+    }
+
     function getAbsoluteDate(date) {
         const options = {
             year: "numeric",
@@ -28,27 +33,35 @@
         return date.toLocaleString("en-GB", options);
     }
 
-    function parseCreatedAt(createdAtDate, now = currentTime) {
-        const minutesElapsed = Math.floor(
-            (now - createdAtDate.getTime()) / 60000,
-        );
-        const sameDay =
-            createdAtDate.toDateString() === new Date(now).toDateString();
-        if (minutesElapsed < 1) {
-            return "now";
-        } else if (minutesElapsed <= 60) {
-            return `${minutesElapsed}m ago`;
-        } else if (sameDay) {
-            const hoursElapsed = Math.floor(minutesElapsed / 60);
-            const remainingMinutes = minutesElapsed % 60;
-            return `${hoursElapsed}h ${remainingMinutes}m ago`;
-        } else {
-            return getAbsoluteDate(createdAtDate);
-        }
+    export function getRelativeDate(createdAtDate, now = Date.now()) {
+        const nowDate = new Date(now);
+
+        const distance = formatDistance(createdAtDate, nowDate, {
+            addSuffix: false,
+            includeSeconds: true,
+        });
+
+        return distance
+            .replace(/^about /, "")
+            .replace(/^over /, "")
+            .replace(/^almost /, "")
+            .replace(/^less than a minute$/, "now")
+            .replace(/^half a minute$/, "now")
+            .replace(/^less than \d+ seconds?$/, "now")
+            .replace(/^(\d+) minutes?$/, "$1m")
+            .replace(/^(\d+) hours?$/, "$1hr")
+            .replace(/^1 day$/, "yesterday")
+            .replace(/^(\d+) days?$/, "$1d")
+            .replace(/^1 week$/, "last week")
+            .replace(/^(\d+) weeks?$/, "$1w")
+            .replace(/^1 month$/, "last month")
+            .replace(/^(\d+) months?$/, "$1mth")
+            .replace(/^1 year$/, "last year")
+            .replace(/^(\d+) years?$/, "$1yr");
     }
 
     $: createdAtDate = new Date(blip._createdAt);
-    $: timeDisplay = parseCreatedAt(createdAtDate, currentTime);
+    $: timeDisplay = getRelativeDate(createdAtDate, currentTime);
 
     function updateCurrentTime() {
         currentTime = Date.now();
@@ -66,32 +79,45 @@
 </script>
 
 <div class="blip">
+    <div class="time">
+        <time class="relative" datetime={getISODate(createdAtDate)}>
+            {timeDisplay}
+        </time>
+        <time class="absolute" datetime={getISODate(createdAtDate)}>
+            {getAbsoluteDate(createdAtDate)}
+        </time>
+    </div>
     <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
-    <time
-        datetime={createdAtDate.toISOString()}
-        class="blip-time"
-        title={getAbsoluteDate(createdAtDate)}
-    >
-        {timeDisplay}
-    </time>
 </div>
 
 <style>
     .blip {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         justify-content: space-between;
-        border-bottom: 2px solid #67d4c5;
+        margin: 0 1rem;
     }
+
+    .blip-content:not(:has(> :only-child:is(blockquote, pre))) {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
     .blip-content {
         > :global(:first-child) {
             margin-top: 0;
         }
+        > :global(:last-child) {
+            margin-bottom: 0;
+        }
     }
-    .blip-time {
+    .time {
         color: #a3a3a3;
         font-size: 0.8rem;
-        text-align: right;
         white-space: pre;
+        display: flex;
+        justify-content: space-between;
     }
 </style>
