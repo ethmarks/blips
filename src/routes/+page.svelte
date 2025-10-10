@@ -1,14 +1,13 @@
 <script>
     import { getBlips } from "../lib/sanity";
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
     import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
     import Blip from "../lib/components/blip.svelte";
     import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
 
-    const pageSize = 20;
+    const pageSize = 5;
     const useSample = false; // for testing purposes only
-    const updateInterval = 60000;
 
     // Skeleton configuration constants
     const SKELETON_COUNT_MIN = 10;
@@ -18,13 +17,9 @@
     const SKELETON_WIDTH_MIN = 80;
     const SKELETON_WIDTH_MAX = 100;
 
-    let blips = [];
-    let loading = true;
-    let error = null;
-    let updateTimer;
     let currentPage = 1;
-    let hasMore = false;
     let skeletonConfig = [];
+    let blipsPromise = Promise.resolve({ blips: [], hasMore: false });
 
     // Simple cache: map of page number to blips
     const pageCache = new Map();
@@ -32,66 +27,27 @@
     async function fetchWindowedBlips(page = 1) {
         // Check if we have the current page cached
         if (pageCache.has(page)) {
-            // Load instantly from cache
-            blips = pageCache.get(page).blips;
-            hasMore = pageCache.get(page).hasMore;
-            loading = false;
-        } else {
-            loading = true;
-            // Generate skeleton config once when loading starts
-            generateSkeletonConfig();
+            // Return cached data immediately
+            return pageCache.get(page);
         }
 
         // Fetch a window: prev page + current page + next page
         const startPage = Math.max(1, page - 1);
         const endPage = page + 1;
 
-        try {
-            // Fetch each page in the window
-            for (let p = startPage; p <= endPage; p++) {
-                if (!pageCache.has(p)) {
-                    const result = await getBlips(useSample, p, pageSize);
-                    pageCache.set(p, {
-                        blips: result.blips,
-                        hasMore: result.hasMore,
-                    });
-                }
+        // Fetch each page in the window
+        for (let p = startPage; p <= endPage; p++) {
+            if (!pageCache.has(p)) {
+                const result = await getBlips(useSample, p, pageSize);
+                pageCache.set(p, {
+                    blips: result.blips,
+                    hasMore: result.hasMore,
+                });
             }
-
-            // Update display with current page data
-            if (pageCache.has(page)) {
-                blips = pageCache.get(page).blips;
-                hasMore = pageCache.get(page).hasMore;
-            }
-
-            loading = false;
-            error = null;
-        } catch (err) {
-            error = err;
-            loading = false;
         }
-    }
 
-    async function silentAutoUpdate() {
-        try {
-            // Fetch fresh data for page 1 without affecting loading state
-            const result = await getBlips(useSample, 1, pageSize);
-
-            // Update cache with fresh data
-            pageCache.set(1, {
-                blips: result.blips,
-                hasMore: result.hasMore,
-            });
-
-            // If we're currently on page 1, update the display
-            if (currentPage === 1) {
-                blips = result.blips;
-                hasMore = result.hasMore;
-            }
-        } catch (err) {
-            // Silently fail - don't update error state during auto-update
-            console.warn("Auto-update failed:", err);
-        }
+        // Return current page data
+        return pageCache.get(page);
     }
 
     function generateSkeletonConfig() {
@@ -136,29 +92,17 @@
         }
         goto(url.pathname + url.search, { replaceState: false });
 
-        fetchWindowedBlips(newPage);
+        blipsPromise = fetchWindowedBlips(newPage);
     }
+
+    generateSkeletonConfig();
 
     onMount(() => {
         if (browser) {
             const params = new URLSearchParams(window.location.search);
             currentPage = parseInt(params.get("p")) || 1;
         }
-        generateSkeletonConfig();
-        fetchWindowedBlips(currentPage);
-
-        updateTimer = setInterval(() => {
-            // only auto-update on first page
-            if (currentPage === 1) {
-                silentAutoUpdate();
-            }
-        }, updateInterval);
-    });
-
-    onDestroy(() => {
-        if (updateTimer) {
-            clearInterval(updateTimer);
-        }
+        blipsPromise = fetchWindowedBlips(currentPage);
     });
 </script>
 
@@ -177,17 +121,15 @@
         <p>~Ethan</p>
     </div>
     <div id="blips">
-        {#if loading}
+        {#await blipsPromise}
             {#each skeletonConfig as config, i}
                 <BlipSkeleton
                     lineCount={config.lineCount}
                     lineWidths={config.lineWidths}
                 />
             {/each}
-        {:else if error}
-            <p>Error loading blips: {error.message}</p>
-        {:else}
-            {#each blips as blip}
+        {:then data}
+            {#each data.blips as blip}
                 <Blip {blip} />
             {/each}
 
@@ -202,7 +144,7 @@
                         ← Previous page
                     </a>
                 {/if}
-                {#if hasMore}
+                {#if data.hasMore}
                     <a
                         href="/?p={currentPage + 1}"
                         id="more-link"
@@ -213,7 +155,9 @@
                     </a>
                 {/if}
             </nav>
-        {/if}
+        {:catch error}
+            <p>Error loading blips: {error.message}</p>
+        {/await}
     </div>
 </article>
 
