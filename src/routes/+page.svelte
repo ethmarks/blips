@@ -9,14 +9,6 @@
     const pageSize = 5;
     const useSample = false; // for testing purposes only
 
-    // Skeleton configuration constants
-    const SKELETON_COUNT_MIN = 10;
-    const SKELETON_COUNT_MAX = 20;
-    const SKELETON_LINES_MIN = 3;
-    const SKELETON_LINES_MAX = 6;
-    const SKELETON_WIDTH_MIN = 80;
-    const SKELETON_WIDTH_MAX = 100;
-
     let currentPage = 1;
     let skeletonConfig = [];
     let blipsPromise = Promise.resolve({ blips: [], hasMore: false });
@@ -51,27 +43,36 @@
     }
 
     function generateSkeletonConfig() {
-        const count =
-            Math.floor(
-                Math.random() * (SKELETON_COUNT_MAX - SKELETON_COUNT_MIN + 1),
-            ) + SKELETON_COUNT_MIN;
+        const SKELETON_LINES_MIN = 3;
+        const SKELETON_LINES_MAX = 6;
+        const SKELETON_WIDTH_MIN = 80;
+        const SKELETON_WIDTH_MAX = 100;
+
+        // Seeded random number generator using Linear Congruential Generator
+        let seed = 8;
+        function seededRandom() {
+            seed = (seed * 1664525 + 1013904223) % Math.pow(2, 32);
+            return seed / Math.pow(2, 32);
+        }
+
+        const count = pageSize;
         skeletonConfig = Array.from({ length: count }, () => ({
             lineCount:
                 Math.floor(
-                    Math.random() *
+                    seededRandom() *
                         (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
                 ) + SKELETON_LINES_MIN,
             lineWidths: Array.from(
                 {
                     length:
                         Math.floor(
-                            Math.random() *
+                            seededRandom() *
                                 (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
                         ) + SKELETON_LINES_MIN,
                 },
                 () =>
                     Math.floor(
-                        Math.random() *
+                        seededRandom() *
                             (SKELETON_WIDTH_MAX - SKELETON_WIDTH_MIN + 1),
                     ) + SKELETON_WIDTH_MIN,
             ),
