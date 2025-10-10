@@ -50,13 +50,9 @@
             .replace(/^less than \d+ seconds?$/, "now")
             .replace(/^(\d+) minutes?$/, "$1m")
             .replace(/^(\d+) hours?$/, "$1hr")
-            .replace(/^1 day$/, "yesterday")
             .replace(/^(\d+) days?$/, "$1d")
-            .replace(/^1 week$/, "last week")
             .replace(/^(\d+) weeks?$/, "$1w")
-            .replace(/^1 month$/, "last month")
             .replace(/^(\d+) months?$/, "$1mth")
-            .replace(/^1 year$/, "last year")
             .replace(/^(\d+) years?$/, "$1yr");
     }
 
