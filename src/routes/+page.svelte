@@ -6,7 +6,7 @@
     import Blip from "../lib/components/blip.svelte";
     import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
 
-    const pageSize = 5;
+    const pageSize = 20;
     const useSample = false; // for testing purposes only
 
     let currentPage = 1;
