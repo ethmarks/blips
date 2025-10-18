@@ -108,6 +108,10 @@
         > :global(:last-child) {
             margin-bottom: 0;
         }
+
+        :global(blockquote) {
+            width: auto;
+        }
     }
     .time {
         color: #a3a3a3;
