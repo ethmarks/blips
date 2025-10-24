@@ -43,7 +43,7 @@
 <main>
     {@render children?.()}
 </main>
-<ethmarks-footer></ethmarks-footer>
+<ethmarks-footer source="https://github.com/ethmarks/blips"></ethmarks-footer>
 
 <style>
     main {
