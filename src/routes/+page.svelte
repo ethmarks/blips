@@ -5,7 +5,7 @@
     import { goto } from "$app/navigation";
     import Blip from "../lib/components/blip.svelte";
     import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
-    import { initOverflowHandlers } from "../lib/overflowHandler.js";
+    import { updateOverflowClasses } from "../lib/overflowHandler.js";
 
     const pageSize = 20;
     const useSample = false; // for testing purposes only
@@ -104,8 +104,7 @@
             const params = new URLSearchParams(window.location.search);
             currentPage = parseInt(params.get("p")) || 1;
 
-            // Initialize overflow handler
-            initOverflowHandlers();
+            window.addEventListener("resize", updateOverflowClasses);
         }
         blipsPromise = fetchWindowedBlips(currentPage);
     });
@@ -160,6 +159,8 @@
                     </a>
                 {/if}
             </nav>
+
+            {setTimeout(updateOverflowClasses, 1)}
         {:catch error}
             <p>Error loading blips: {error.message}</p>
         {/await}

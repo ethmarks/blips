@@ -1,46 +1,43 @@
-export function initOverflowHandlers() {
-  function updateOverflowClasses() {
-    const widthOverflowClass = "width-overflow";
-    const heightOverflowClass = "height-overflow";
+export function updateOverflowClasses() {
+  console.log("overflow classes updated");
 
-    const selectors = ["body", "pre", "table"];
+  const widthOverflowClass = "width-overflow";
+  const heightOverflowClass = "height-overflow";
 
-    document.querySelectorAll(selectors).forEach(function (el) {
-      const contentWidth = el.scrollWidth;
-      let contentHeight = el.scrollHeight;
+  const selectors = ["body", "pre", "table"];
 
-      let containerWidth, containerHeight;
+  document.querySelectorAll(selectors).forEach(function (el) {
+    const contentWidth = el.scrollWidth;
+    let contentHeight = el.scrollHeight;
 
-      if (el.tagName.toLowerCase() === "body") {
-        containerWidth = window.innerWidth;
-        containerHeight = window.innerHeight;
-        contentHeight = Math.max(
-          document.documentElement.scrollHeight,
-          document.body.scrollHeight,
-        );
-      } else {
-        const parent = el.parentElement;
-        containerWidth = parent ? parent.clientWidth : window.innerWidth;
-        containerHeight = parent ? parent.clientHeight : window.innerHeight;
-      }
+    let containerWidth, containerHeight;
 
-      if (contentHeight === 0 || contentWidth === 0) {
-        return;
-      }
+    if (el.tagName.toLowerCase() === "body") {
+      containerWidth = window.innerWidth;
+      containerHeight = window.innerHeight;
+      contentHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+      );
+    } else {
+      const parent = el.parentElement;
+      containerWidth = parent ? parent.clientWidth : window.innerWidth;
+      containerHeight = parent ? parent.clientHeight : window.innerHeight;
+    }
 
-      if (contentWidth > containerWidth) {
-        el.classList.add(widthOverflowClass);
-      } else {
-        el.classList.remove(widthOverflowClass);
-      }
-      if (contentHeight > containerHeight) {
-        el.classList.add(heightOverflowClass);
-      } else {
-        el.classList.remove(heightOverflowClass);
-      }
-    });
-  }
+    if (contentHeight === 0 || contentWidth === 0) {
+      return;
+    }
 
-  window.addEventListener("DOMContentLoaded", updateOverflowClasses);
-  window.addEventListener("resize", updateOverflowClasses);
+    if (contentWidth > containerWidth) {
+      el.classList.add(widthOverflowClass);
+    } else {
+      el.classList.remove(widthOverflowClass);
+    }
+    if (contentHeight > containerHeight) {
+      el.classList.add(heightOverflowClass);
+    } else {
+      el.classList.remove(heightOverflowClass);
+    }
+  });
 }
