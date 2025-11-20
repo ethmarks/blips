@@ -8,7 +8,7 @@ export const sanityClient = createClient({
   apiVersion: '2025-10-03',
 });
 
-export async function getBlips(sample=false, page=1, pageSize=10) {
+export async function getBlips(sample=false, page=1, pageSize=50) {
   if (sample) {
     return await new Promise((resolve, reject) => {
       setTimeout(() => {

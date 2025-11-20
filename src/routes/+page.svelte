@@ -1,112 +1,18 @@
 <script>
-    import { getBlips } from "../lib/sanity";
     import { onMount } from "svelte";
     import { browser } from "$app/environment";
-    import { goto } from "$app/navigation";
-    import Blip from "../lib/components/blip.svelte";
-    import BlipSkeleton from "../lib/components/BlipSkeleton.svelte";
-    import { updateOverflowClasses } from "../lib/overflowHandler.js";
+    import Blip from "$lib/components/blip.svelte";
+    import { updateOverflowClasses } from "$lib/overflowHandler.js";
 
-    const pageSize = 20;
-    const useSample = false; // for testing purposes only
-
-    let currentPage = 1;
-    let skeletonConfig = [];
-    let blipsPromise = Promise.resolve({ blips: [], hasMore: false });
-
-    // Simple cache: map of page number to blips
-    const pageCache = new Map();
-
-    async function fetchWindowedBlips(page = 1) {
-        // Check if we have the current page cached
-        if (pageCache.has(page)) {
-            // Return cached data immediately
-            return pageCache.get(page);
-        }
-
-        // Fetch a window: prev page + current page + next page
-        const startPage = Math.max(1, page - 1);
-        const endPage = page + 1;
-
-        // Fetch each page in the window
-        for (let p = startPage; p <= endPage; p++) {
-            if (!pageCache.has(p)) {
-                const result = await getBlips(useSample, p, pageSize);
-                pageCache.set(p, {
-                    blips: result.blips,
-                    hasMore: result.hasMore,
-                });
-            }
-        }
-
-        // Return current page data
-        return pageCache.get(page);
-    }
-
-    function generateSkeletonConfig() {
-        const SKELETON_LINES_MIN = 3;
-        const SKELETON_LINES_MAX = 6;
-        const SKELETON_WIDTH_MIN = 80;
-        const SKELETON_WIDTH_MAX = 100;
-
-        // Seeded random number generator using Linear Congruential Generator
-        let seed = 8;
-        function seededRandom() {
-            seed = (seed * 1664525 + 1013904223) % Math.pow(2, 32);
-            return seed / Math.pow(2, 32);
-        }
-
-        const count = pageSize;
-        skeletonConfig = Array.from({ length: count }, () => ({
-            lineCount:
-                Math.floor(
-                    seededRandom() *
-                        (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
-                ) + SKELETON_LINES_MIN,
-            lineWidths: Array.from(
-                {
-                    length:
-                        Math.floor(
-                            seededRandom() *
-                                (SKELETON_LINES_MAX - SKELETON_LINES_MIN + 1),
-                        ) + SKELETON_LINES_MIN,
-                },
-                () =>
-                    Math.floor(
-                        seededRandom() *
-                            (SKELETON_WIDTH_MAX - SKELETON_WIDTH_MIN + 1),
-                    ) + SKELETON_WIDTH_MIN,
-            ),
-        }));
-    }
-
-    function navigateToPage(newPage) {
-        if (newPage === currentPage) return;
-
-        currentPage = newPage;
-
-        // Update URL
-        const url = new URL(window.location);
-        if (newPage === 1) {
-            url.searchParams.delete("p");
-        } else {
-            url.searchParams.set("p", newPage.toString());
-        }
-        goto(url.pathname + url.search, { replaceState: false });
-
-        blipsPromise = fetchWindowedBlips(newPage);
-    }
-
-    generateSkeletonConfig();
+    // Get preloaded data from the server
+    let { data } = $props();
 
     onMount(() => {
         if (browser) {
-            const params = new URLSearchParams(window.location.search);
-            currentPage = parseInt(params.get("p")) || 1;
-
             window.addEventListener("resize", updateOverflowClasses);
+            // Run overflow classes after mount
+            setTimeout(updateOverflowClasses, 1);
         }
-        blipsPromise = fetchWindowedBlips(currentPage);
     });
 </script>
 
@@ -125,45 +31,9 @@
         <p>~Ethan</p>
     </div>
     <div id="blips">
-        {#await blipsPromise}
-            {#each skeletonConfig as config, i}
-                <BlipSkeleton
-                    lineCount={config.lineCount}
-                    lineWidths={config.lineWidths}
-                />
-            {/each}
-        {:then data}
-            {#each data.blips as blip}
-                <Blip {blip} />
-            {/each}
-
-            <nav>
-                {#if currentPage > 1}
-                    <a
-                        href="/?p={currentPage - 1}"
-                        id="back-link"
-                        on:click|preventDefault={() =>
-                            navigateToPage(currentPage - 1)}
-                    >
-                        ← Previous page
-                    </a>
-                {/if}
-                {#if data.hasMore}
-                    <a
-                        href="/?p={currentPage + 1}"
-                        id="more-link"
-                        on:click|preventDefault={() =>
-                            navigateToPage(currentPage + 1)}
-                    >
-                        Next page →
-                    </a>
-                {/if}
-            </nav>
-
-            {setTimeout(updateOverflowClasses, 1)}
-        {:catch error}
-            <p>Error loading blips: {error.message}</p>
-        {/await}
+        {#each data.blips as blip}
+            <Blip {blip} />
+        {/each}
     </div>
 </article>
 
@@ -181,20 +51,5 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-    }
-
-    nav {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        grid-template-rows: 1fr;
-
-        #back-link {
-            grid-column: 1;
-            justify-self: start;
-        }
-        #more-link {
-            grid-column: 3;
-            justify-self: end;
-        }
     }
 </style>

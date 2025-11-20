@@ -1,6 +1,7 @@
 /**
  * Automatically adds <cite> tags to blockquotes by parsing citation patterns.
  * Replicates Hugo partial logic for extracting citations from blockquote text.
+ * Uses regex-based string manipulation for SSR compatibility.
  */
 
 /**
@@ -9,57 +10,54 @@
  * @returns {string} - HTML with processed blockquote citations
  */
 export function postProcessCitations(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-
-    const blockquotes = tempDiv.querySelectorAll('blockquote');
-
-    blockquotes.forEach(blockquote => {
-        const dashPatterns = ['~ '];
-        const citationLengthLimit = 2048;
-
-        const text = blockquote.innerHTML;
-        let content = text;
+    const dashPatterns = ['~ '];
+    const citationLengthLimit = 2048;
+    
+    // Match blockquote tags and their content
+    const blockquoteRegex = /<blockquote>([\s\S]*?)<\/blockquote>/g;
+    
+    return html.replace(blockquoteRegex, (match, content) => {
+        let modifiedContent = content;
         let cite = '';
-
+        
         // Try each dash pattern to find a citation
         for (const dashPattern of dashPatterns) {
-            if (!cite && text.includes(dashPattern)) {
-                const parts = text.split(dashPattern);
-
+            if (!cite && content.includes(dashPattern)) {
+                const parts = content.split(dashPattern);
+                
                 if (parts.length > 1) {
                     let lastPart = parts[parts.length - 1];
-
+                    
                     // Remove closing </p> tag if present
-                    lastPart = lastPart.replace('</p>', '');
-
+                    lastPart = lastPart.replace(/<\/p>\s*$/, '');
+                    
                     // Trim whitespace
                     lastPart = lastPart.trim();
-
+                    
                     // Check if this looks like a valid citation
                     if (lastPart && lastPart.length < citationLengthLimit) {
                         cite = lastPart;
-
+                        
                         // Rebuild content without the citation
                         const contentParts = parts.slice(0, -1);
-                        content = contentParts.join(dashPattern);
-
+                        modifiedContent = contentParts.join(dashPattern);
+                        
                         // Ensure content ends with </p> if it doesn't already
-                        if (!content.endsWith('</p>')) {
-                            content = content + '</p>';
+                        if (!modifiedContent.trim().endsWith('</p>')) {
+                            modifiedContent = modifiedContent + '</p>';
                         }
-
+                        
                         break;
                     }
                 }
             }
         }
-
+        
         // If we found a citation, rebuild the blockquote
         if (cite) {
-            blockquote.innerHTML = content + `\n<cite>${cite}</cite>`;
+            return `<blockquote>${modifiedContent}\n<cite>${cite}</cite></blockquote>`;
         }
+        
+        return match;
     });
-
-    return tempDiv.innerHTML;
 }
