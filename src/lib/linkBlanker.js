@@ -1,6 +1,7 @@
 /**
  * Automatically adds target="_blank" and rel="noopener" to external links.
  * Links are considered external if they don't point to ethmarks.github.io domain.
+ * Uses regex-based string manipulation for SSR compatibility.
  */
 
 /**
@@ -9,17 +10,14 @@
  * @returns {string} - HTML with external links modified to open in new tabs
  */
 export function postProcessExternalLinks(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    
-    const links = tempDiv.querySelectorAll('a[href]');
     const siteUrl = 'ethmarks.github.io';
     
-    links.forEach(link => {
-        const href = link.getAttribute('href');
-        
+    // Match all <a> tags with href attributes
+    const linkRegex = /<a\s+([^>]*href=["']([^"']*)["'][^>]*)>/gi;
+    
+    return html.replace(linkRegex, (match, attributes, href) => {
         // Skip if href is empty or null
-        if (!href) return;
+        if (!href) return match;
         
         // Skip internal links (relative URLs, fragments, mailto, tel, etc.)
         if (href.startsWith('#') || 
@@ -27,7 +25,12 @@ export function postProcessExternalLinks(html) {
             href.startsWith('mailto:') || 
             href.startsWith('tel:') ||
             !href.includes('://')) {
-            return;
+            return match;
+        }
+        
+        // Check if the link already has target="_blank"
+        if (attributes.includes('target=')) {
+            return match;
         }
         
         // Check if the link points to the same domain
@@ -37,15 +40,15 @@ export function postProcessExternalLinks(html) {
             
             // If it's not our domain, make it external
             if (!hostname.includes(siteUrl)) {
-                link.setAttribute('target', '_blank');
-                link.setAttribute('rel', 'noopener');
+                // Add target and rel attributes
+                return `<a ${attributes} target="_blank" rel="noopener">`;
             }
         } catch (e) {
             // If URL parsing fails, treat as external for safety
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener');
+            return `<a ${attributes} target="_blank" rel="noopener">`;
         }
+        
+        // Internal link, return unchanged
+        return match;
     });
-    
-    return tempDiv.innerHTML;
 }
