@@ -2,9 +2,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   repository_dispatch:
     types: [sanity-dispatch]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build_site:
     runs-on: ubuntu-latest
@@ -20,14 +23,14 @@ jobs:
         run: npm i
       - name: build
         env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
+          BASE_PATH: "/${{ github.event.repository.name }}"
           NODE_ENV: production
         run: |
           npm run build
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build/'
+          path: "build/"
   deploy:
     needs: build_site
     runs-on: ubuntu-latest
