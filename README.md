@@ -52,17 +52,17 @@ The bulk of the studio's source code was auto-generated using the `npm create sa
 
 My Sanity project also utilizes a [webhook](https://www.sanity.io/docs/compute-and-ai/webhooks) that automatically triggers a site rebuild whenever a new blip is created. The configuration for the webhook is below.
 
-| Field        | Value                                                                               |
-|--------------|-------------------------------------------------------------------------------------|
-| Name         | GitHub Pages Deploy                                                                 |
-| Description  | Automatically triggers a rebuild of the SvelteKit site upon content update          |
-| URL          | https://api.github.com/repos/ethmarks/blips/dispatches                              |
-| Dataset      | production                                                                          |
-| Trigger on   | Create, Update, Delete                                                              |
-| Projection   | {"event_type": "sanity-dispatch"}                                                   |
-| HTTP method  | POST                                                                                |
-| HTTP headers | {"Accept": "application/vnd.github+json", "Authorization": "Bearer <GITHUB TOKEN>"} |
-| API version  | v2021-03-25                                                                         |
+| Field        | Value                                                                                 |
+|--------------|---------------------------------------------------------------------------------------|
+| Name         | GitHub Pages Deploy                                                                   |
+| Description  | Automatically triggers a rebuild of the SvelteKit site upon content update            |
+| URL          | https://api.github.com/repos/ethmarks/blips/dispatches                                |
+| Dataset      | production                                                                            |
+| Trigger on   | Create, Update, Delete                                                                |
+| Projection   | {"event_type": "sanity-dispatch"}                                                     |
+| HTTP method  | POST                                                                                  |
+| HTTP headers | {"Accept": "application/vnd.github+json", "Authorization": "Bearer \<GITHUB TOKEN\>"} |
+| API version  | v2021-03-25                                                                           |
 
 The `<GITHUB TOKEN>` is a placeholder for the GitHub Personal Access Token, which is necessary for authorizing the webhook. The token has access to the `ethmarks/blips` repository and has its `Contents` permission set to `Read and write`.
 
