@@ -1,6 +1,6 @@
 # Blips
 
-Blips is my (Ethan Marks) personal microblog. I use it for random updates, stream-of-consciousness notes, and the various interesting quotes or knowledge that I stumbled upon.
+Blips is my (Ethan Marks) personal microblog. I use it for random updates, stream-of-consciousness notes, and the various interesting quotes and tidbits that I stumble upon.
 
 <https://ethmarks.github.io/blips/>
 
@@ -9,6 +9,17 @@ Blips is my (Ethan Marks) personal microblog. I use it for random updates, strea
 - **Framework**: [SvelteKit](https://svelte.dev/)
 - **Content Management System**: [Sanity](https://www.sanity.io/)
 - **Hosting**: [GitHub Pages](https://docs.github.com/en/pages)
+
+## Usage
+
+This project really isn't intended to be used by anyone other than me, but if you insist, you can run Blips locally with the following commands.
+
+```bash
+git clone https://github.com/ethmarks/blips.git
+cd blips
+npm install
+npm run dev
+```
 
 ## SvelteKit
 
@@ -48,6 +59,14 @@ This repo contains a [Sanity Studio](https://www.sanity.io/docs/studio) in the [
 
 The bulk of the studio's source code was auto-generated using the `npm create sanity@latest` command. The only pieces of custom code are the schemas, [`blip.ts`](studio-ethmarks-blips/schemaTypes/blip.ts) and [`index.ts`](studio-ethmarks-blips/schemaTypes/index.ts).
 
+The studio can be run locally with the following commands (assuming you've already cloned the repo):
+
+```bash
+cd studio-ethmarks-blips
+npm install
+npm run dev
+```
+
 ### Webhook
 
 My Sanity project also utilizes a [webhook](https://www.sanity.io/docs/compute-and-ai/webhooks) that automatically triggers a site rebuild whenever a new blip is created. The configuration for the webhook is below.
@@ -69,17 +88,6 @@ The `<GITHUB TOKEN>` is a placeholder for the GitHub Personal Access Token, whic
 ## Deployment
 
 The project is automatically deployed to GitHub Pages via the [`deploy.yml`](.github/workflows/deploy.yml) workflow. The workflow triggers on every push to the `main` branch and upon every dispatch from the [Sanity webhook](#webhook).
-
-## Usage
-
-This project really isn't intended to be used by anyone other than me, but if you insist, you can run Blips locally with the following commands.
-
-```bash
-git clone https://github.com/ethmarks/blips.git
-cd blips
-npm install
-npm run dev
-```
 
 ## License
 
