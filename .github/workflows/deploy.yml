@@ -7,7 +7,7 @@ on:
     types: [sanity-dispatch]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   build_site:
     runs-on: ubuntu-latest
