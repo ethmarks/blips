@@ -1,14 +1,14 @@
-import { createClient } from '@sanity/client';
-import { sampleBlips } from './sampleBlips'
+import { createClient } from "@sanity/client";
+import { sampleBlips } from "./sampleBlips";
 
 export const sanityClient = createClient({
-  projectId: 'nhqqp3l1',
-  dataset: 'production',
-  useCdn: process.env.NODE_ENV === 'production',
-  apiVersion: '2025-10-03',
+  projectId: "nhqqp3l1",
+  dataset: "production",
+  useCdn: false,
+  apiVersion: "2025-10-03",
 });
 
-export async function getBlips(sample=false, page=1, pageSize=50) {
+export async function getBlips(sample = false, page = 1, pageSize = 50) {
   if (sample) {
     return await new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -21,7 +21,7 @@ export async function getBlips(sample=false, page=1, pageSize=50) {
           totalCount: allBlips.length,
           hasMore: endIndex < allBlips.length,
           currentPage: page,
-          totalPages: Math.ceil(allBlips.length / pageSize)
+          totalPages: Math.ceil(allBlips.length / pageSize),
         });
       }, 300);
     });
@@ -33,7 +33,7 @@ export async function getBlips(sample=false, page=1, pageSize=50) {
   const totalCount = await sanityClient.fetch('count(*[_type == "blip"])');
 
   const blips = await sanityClient.fetch(
-    `*[_type == "blip"] | order(_createdAt desc) [${startIndex}...${endIndex}] {_id, _createdAt, content}`
+    `*[_type == "blip"] | order(_createdAt desc) [${startIndex}...${endIndex}] {_id, _createdAt, content}`,
   );
 
   return {
@@ -41,6 +41,6 @@ export async function getBlips(sample=false, page=1, pageSize=50) {
     totalCount,
     hasMore: endIndex < totalCount,
     currentPage: page,
-    totalPages: Math.ceil(totalCount / pageSize)
+    totalPages: Math.ceil(totalCount / pageSize),
   };
 }
