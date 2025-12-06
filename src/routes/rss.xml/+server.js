@@ -94,7 +94,7 @@ async function generateRss(blips) {
       <link>${escapeXml(link)}</link>
       <guid isPermaLink="false">${escapeXml(blip._id)}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description>${escapeXml(htmlContent)}</description>
+      <description><![CDATA[${htmlContent}]]></description>
     </item>`;
     }),
   );
