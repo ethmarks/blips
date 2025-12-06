@@ -83,7 +83,7 @@ async function generateRss(blips) {
   const items = await Promise.all(
     blips.map(async (blip) => {
       const pubDate = new Date(blip._createdAt).toUTCString();
-      const link = SITE_URL;
+      const link = `${SITE_URL}#${blip._id}`;
       const title = generateTitle(blip.content);
       // Convert markdown to HTML
       const htmlContent = await marked(blip.content);
