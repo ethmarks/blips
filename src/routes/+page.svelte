@@ -18,7 +18,10 @@
 
 <h1 class="animated">Blips</h1>
 <article class="animated">
-    <p id="definition">Blip (noun) - a ping of activity on a radar</p>
+    <div id="intro-top">
+        <p id="definition">Blip (noun) - a ping of activity on a radar</p>
+        <p id="rss"><a href="rss.xml">RSS</a></p>
+    </div>
     <div id="intro-text">
         <p>
             My Blips are basically my blog. Not to be confused with my <a
@@ -38,9 +41,31 @@
 </article>
 
 <style>
+    article {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    #intro-top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0.5rem 0;
+    }
+
     #definition {
         font-weight: 600;
         font-size: 1.4rem;
+        margin: 0;
+    }
+
+    #rss {
+        margin: 0;
+
+        @media (min-width: 768px) {
+            align-content: center;
+        }
     }
 
     #intro-text {

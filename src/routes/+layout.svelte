@@ -24,6 +24,12 @@
         content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
     />
     <link rel="canonical" href="https://ethmarks.github.io/blips" />
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="Blips RSS Feed"
+        href="https://ethmarks.github.io/blips/rss.xml"
+    />
 
     <link
         rel="stylesheet"

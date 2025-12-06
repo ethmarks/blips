@@ -74,7 +74,7 @@
     });
 </script>
 
-<div class="blip">
+<div class="blip" id={blip._id}>
     <div class="time">
         <time class="relative" datetime={getISODate(createdAtDate)}>
             {timeDisplay}
