@@ -54,7 +54,10 @@ function generateTitle(content) {
     : firstSentence;
 }
 
-const URL = process.env.SITE_URL;
+const URL =
+  process.env.PROD_URL ||
+  process.env.SITE_URL ||
+  "https://ethmarks.github.io/blips/";
 const SITE_TITLE = "Blips";
 const SITE_DESCRIPTION =
   "Ethan-flavoured Tumblr. Short-form blog posts about what I'm up to or random interesting things.";
