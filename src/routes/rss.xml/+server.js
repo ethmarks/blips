@@ -54,7 +54,7 @@ function generateTitle(content) {
     : firstSentence;
 }
 
-const SITE_URL = "https://ethmarks.github.io/blips";
+const URL = process.env.SITE_URL;
 const SITE_TITLE = "Blips";
 const SITE_DESCRIPTION =
   "Ethan-flavoured Tumblr. Short-form blog posts about what I'm up to or random interesting things.";
@@ -83,7 +83,7 @@ async function generateRss(blips) {
   const items = await Promise.all(
     blips.map(async (blip) => {
       const pubDate = new Date(blip._createdAt).toUTCString();
-      const link = `${SITE_URL}#${blip._id}`;
+      const link = `${URL}#${blip._id}`;
       const title = generateTitle(blip.content);
       // Convert markdown to HTML
       const htmlContent = await marked(blip.content);
@@ -105,10 +105,10 @@ async function generateRss(blips) {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(SITE_TITLE)}</title>
-    <link>${SITE_URL}</link>
+    <link>${URL}</link>
     <description>${escapeXml(SITE_DESCRIPTION)}</description>
     <language>en-us</language>
-    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${URL}/rss.xml" rel="self" type="application/rss+xml"/>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>${itemsStr}
   </channel>
 </rss>`;
