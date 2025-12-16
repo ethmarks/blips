@@ -108,7 +108,7 @@ async function generateRss(blips) {
     <link>${URL}</link>
     <description>${escapeXml(SITE_DESCRIPTION)}</description>
     <language>en-us</language>
-    <atom:link href="${URL}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${URL}rss.xml" rel="self" type="application/rss+xml"/>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>${itemsStr}
   </channel>
 </rss>`;
