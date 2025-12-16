@@ -11,7 +11,7 @@ const config = {
       strict: true,
     }),
     paths: {
-      base: process.env.NODE_ENV === "production" ? "/blips" : "",
+      base: process.env.BASE_PATH || "",
     },
     prerender: {
       handleHttpError: ({ path, referrer, message }) => {
