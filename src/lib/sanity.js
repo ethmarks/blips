@@ -1,5 +1,4 @@
 import { createClient } from "@sanity/client";
-import { sampleBlips } from "./sampleBlips";
 
 export const sanityClient = createClient({
   projectId: "nhqqp3l1",
@@ -8,25 +7,7 @@ export const sanityClient = createClient({
   apiVersion: "2025-10-03",
 });
 
-export async function getBlips(sample = false, page = 1, pageSize = 50) {
-  if (sample) {
-    return await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const allBlips = JSON.parse(sampleBlips).result;
-        const startIndex = (page - 1) * pageSize;
-        const endIndex = startIndex + pageSize;
-        const paginatedBlips = allBlips.slice(startIndex, endIndex);
-        resolve({
-          blips: paginatedBlips,
-          totalCount: allBlips.length,
-          hasMore: endIndex < allBlips.length,
-          currentPage: page,
-          totalPages: Math.ceil(allBlips.length / pageSize),
-        });
-      }, 300);
-    });
-  }
-
+export async function getBlips(page = 1, pageSize = 50) {
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
 
