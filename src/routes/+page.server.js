@@ -3,7 +3,7 @@ import { getBlips } from "../lib/sanity.js";
 
 export async function load() {
   try {
-    const data = await getBlips(1, 50);
+    const data = await getBlips();
 
     return {
       blips: data.blips,

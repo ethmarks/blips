@@ -120,7 +120,7 @@ async function generateRss(blips) {
 /** @type {import('./$types').RequestHandler} */
 export async function GET() {
   try {
-    const data = await getBlips(1, 50);
+    const data = await getBlips();
     const rss = await generateRss(data.blips);
 
     return new Response(rss, {
