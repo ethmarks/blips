@@ -38,6 +38,11 @@
             <Blip {blip} />
         {/each}
     </div>
+    {#if !data.allBlipsShown}
+        <div id="end">
+            <p>Showing the latest 50 blips. Older ones are off-radar...</p>
+        </div>
+    {/if}
 </article>
 
 <style>
@@ -76,5 +81,20 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+    }
+
+    #end {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: var(--spacing-sm) 0 0;
+    }
+
+    #end p {
+        margin: 0;
+        color: hsl(0, 0%, 75%);
+        font-style: italic;
+        font-size: 1rem;
+        text-align: center;
     }
 </style>
