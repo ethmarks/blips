@@ -40,7 +40,7 @@
         href="https://ethmarks.github.io/css/blips.min.css"
     />
     <script
-        src="https://ethmarks.github.io/js/ethmarks-components.js"
+        src="https://ethmarks.vercel.app/js/ethmarks-components.js"
         defer
     ></script>
 </svelte:head>
