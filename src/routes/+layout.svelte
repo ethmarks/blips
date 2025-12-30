@@ -30,7 +30,6 @@
         title="Blips RSS Feed"
         href="https://ethmarks.github.io/blips/rss.xml"
     />
-
     <link
         rel="stylesheet"
         href="https://ethmarks.vercel.app/css/global.min.css"
@@ -46,9 +45,11 @@
 </svelte:head>
 
 <ethmarks-header active="blips"></ethmarks-header>
+
 <main>
     {@render children?.()}
 </main>
+
 <ethmarks-footer source="https://github.com/ethmarks/blips"></ethmarks-footer>
 
 <style>
