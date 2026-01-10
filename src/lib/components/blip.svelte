@@ -93,6 +93,7 @@
         justify-content: space-between;
         margin: 0 1rem;
         scroll-margin-top: calc(var(--main-margin-top) + var(--spacing-lg));
+        font-size: 1.2rem;
     }
 
     .blip-content:not(:has(> :only-child:is(blockquote, pre))) {
