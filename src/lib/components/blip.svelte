@@ -92,6 +92,7 @@
         flex-direction: column;
         justify-content: space-between;
         margin: 0 1rem;
+        scroll-margin-top: calc(var(--main-margin-top) + var(--spacing-lg));
     }
 
     .blip-content:not(:has(> :only-child:is(blockquote, pre))) {
@@ -99,6 +100,10 @@
         padding: 0.7rem 1rem;
         border-radius: 8px;
         border: 1px solid rgba(255, 255, 255, 0.3);
+
+        :target & {
+            border: var(--border-accent-2px);
+        }
     }
 
     .blip-content {
