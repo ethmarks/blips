@@ -47,7 +47,7 @@ The header and footer are imported as Web Components from my main site through a
 
 ### Markdown Processing
 
-The Blip content is converted to HTML using the [`Marked`](https://www.npmjs.com/package/marked) library. It is further processed using a pipeline of custom JavaScript functions, including [`linkBlanker.js`](src/lib/linkBlanker.js)--which adds `target="_blank"` to external links--and [`blockquoteCitations.js`](src/lib/blockquoteCitations.js) which encases blockquote citations with `<cite>` tags.
+The Blip content is converted to HTML using the [`Marked`](https://www.npmjs.com/package/marked) library. It is further processed using a pipeline of custom JavaScript functions such as [`blockquoteCitations.js`](src/lib/blockquoteCitations.js) which encases blockquote citations with `<cite>` tags.
 
 ## Sanity CMS
 
