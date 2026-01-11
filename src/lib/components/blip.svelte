@@ -1,19 +1,11 @@
 <script>
-    import { marked } from "marked";
     import { formatDistance } from "date-fns";
     import { onMount, onDestroy } from "svelte";
-    import { postProcessCitations } from "$lib/blockquoteCitations.js";
 
     export let blip;
 
     let currentTime = Date.now();
     let timeUpdateInterval;
-
-    function renderMarkdown(markdown) {
-        let html = marked(markdown || "");
-        html = postProcessCitations(html);
-        return html;
-    }
 
     function getISODate(date) {
         return date.toISOString();
@@ -81,7 +73,7 @@
             {getAbsoluteDate(createdAtDate)}
         </time>
     </div>
-    <div class="blip-content">{@html renderMarkdown(blip.content)}</div>
+    <div class="blip-content">{@html blip.renderedContent}</div>
 </div>
 
 <style>
