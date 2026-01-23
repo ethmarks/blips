@@ -1,7 +1,7 @@
 import adapter from "@sveltejs/adapter-static";
 
-const basePath = process.env.BASE_PATH || "";
-const outDir = process.env.OUT_DIR || "dist";
+const basePath = process.env.BASE_PATH || ""; // "/blips"
+const outDir = process.env.OUT_DIR || "dist"; // "dist/blips"
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -15,6 +15,7 @@ const config = {
     }),
     paths: {
       base: basePath,
+      relative: false,
     },
     prerender: {
       handleHttpError: ({ path, referrer, message }) => {
