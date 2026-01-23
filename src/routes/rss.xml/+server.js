@@ -126,7 +126,6 @@ export async function GET() {
     return new Response(rss, {
       headers: {
         "Content-Type": "application/rss+xml",
-        "Cache-Control": "max-age=0, s-maxage=3600",
       },
     });
   } catch (err) {
@@ -134,5 +133,3 @@ export async function GET() {
     return new Response("Failed to generate RSS feed", { status: 500 });
   }
 }
-
-export const prerender = true;
