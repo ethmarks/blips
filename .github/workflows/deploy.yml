@@ -23,15 +23,15 @@ jobs:
         run: npm i
       - name: build
         env:
-          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
-          BASE_PATH: "/${{ github.event.repository.name }}"
+          SITE_URL: https://ethmarks.github.io/blips/
+          BASE_PATH: "/blips"
           NODE_ENV: production
         run: |
           npm run build
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "build/"
+          path: "dist/"
   deploy:
     needs: build_site
     runs-on: ubuntu-latest
