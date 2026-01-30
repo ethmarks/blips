@@ -1,29 +1,30 @@
 <script>
     let { children } = $props();
+
+    const canonUrl = "https://ethmarks.github.io/blips";
+    const title = "Blips";
+    const desc =
+        "Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity.";
+    const img = "/blips.png";
 </script>
 
 <svelte:head>
-    <title>Blips</title>
-    <meta name="title" content="Blips" />
-    <meta
-        name="description"
-        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
-    />
-    <meta name="author" content="Ethan" />
+    <title>{title}</title>
+    <meta name="description" content={desc} />
+
+    <link rel="canonical" href={canonUrl} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Blips" />
-    <meta
-        property="og:description"
-        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
-    />
-    <meta property="og:site_name" content="Blips" />
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="Blips" />
-    <meta
-        property="twitter:description"
-        content="Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity."
-    />
-    <link rel="canonical" href="https://ethmarks.github.io/blips" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:image" content={canonUrl + img} />
+    <meta property="og:url" content={canonUrl} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={canonUrl + img} />
+
     <link
         rel="alternate"
         type="application/rss+xml"
