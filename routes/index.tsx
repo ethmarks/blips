@@ -4,13 +4,6 @@ import { type Blip, fetchBlips } from "../utils/fetchBlips.ts";
 import { renderMarkdown } from "../utils/renderMarkdown.ts";
 import SingleBlip from "../components/SingleBlip.tsx";
 
-const data = await fetchBlips();
-
-const blipsWithRenderedContent: Blip[] = data.blips.map((blip) => ({
-  ...blip,
-  renderedContent: renderMarkdown(blip.content),
-}));
-
 function BlipsList({ renderedBlips }: { renderedBlips: Blip[] }) {
   return (
     <div id="blips">
@@ -32,7 +25,16 @@ function EndDiv({ allBlipsShown }: { allBlipsShown: boolean }) {
   );
 }
 
-export default define.page(function Home() {
+export default define.page(async function Home() {
+  const data = await fetchBlips();
+
+  const blipsWithRenderedContent: Blip[] = data.blips.map((blip) => ({
+    ...blip,
+    renderedContent: renderMarkdown(blip.content),
+  }));
+
+  const allBlipsShown = data.allBlipsShown;
+
   const canonUrl = "https://site-ethmarks.vercel.app/blips";
   const title = "Blips";
   const desc =
