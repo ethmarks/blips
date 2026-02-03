@@ -21,9 +21,9 @@ function BlipsList({ renderedBlips }: { renderedBlips: Blip[] }) {
   );
 }
 
-function EndDiv() {
-  if (data.allBlipsShown) {
-    return;
+function EndDiv({ allBlipsShown }: { allBlipsShown: boolean }) {
+  if (allBlipsShown) {
+    return null;
   }
   return (
     <div id="end">
@@ -95,7 +95,7 @@ export default define.page(function Home() {
             <p>~Ethan</p>
           </div>
           <BlipsList renderedBlips={blipsWithRenderedContent} />
-          <EndDiv />
+          <EndDiv allBlipsShown={allBlipsShown} />
         </article>
       </main>
       <eth-footer source="https://github.com/ethmarks/blips"></eth-footer>
