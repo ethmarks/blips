@@ -7,14 +7,27 @@ export const sanityClient = createClient({
   apiVersion: "2025-10-03",
 });
 
-export default async function fetchBlips(pageSize = 50) {
-  const blips = await sanityClient.fetch(
+interface Blip {
+  _id: string;
+  _createdAt: string;
+  content: string;
+}
+
+interface FetchBlipsResult {
+  blips: Blip[];
+  allBlipsShown: boolean;
+}
+
+export default async function fetchBlips(
+  pageSize = 50,
+): Promise<FetchBlipsResult> {
+  const blips = await sanityClient.fetch<Blip[]>(
     `*[_type == "blip"] | order(_createdAt desc) [0...${pageSize}] {_id, _createdAt, content}`,
   );
 
   const earliestBlip = blips.at(-1);
   const originalBlipContent = "Lo and behold, for this is my first Blip.";
-  const allBlipsShown = earliestBlip.content === originalBlipContent;
+  const allBlipsShown = earliestBlip?.content === originalBlipContent;
 
   return {
     blips,
