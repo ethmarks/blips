@@ -3,7 +3,7 @@ import { define } from "../utils.ts";
 import { type Blip, fetchBlips } from "../utils/fetchBlips.ts";
 import { render } from "gfm";
 import postProcessCitations from "../utils/blockquoteCitations.ts";
-import SingleBlip from "../islands/SingleBlip.tsx";
+import SingleBlip from "../components/SingleBlip.tsx";
 
 function renderMarkdown(markdown: string) {
   let html = render(markdown);
