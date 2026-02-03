@@ -1,7 +1,30 @@
 // deno-lint-ignore-file react-no-danger
 import { useEffect, useState } from "preact/hooks";
 import { type Blip } from "../utils/fetchBlips.ts";
-import "dayjs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
+
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("en", {
+  relativeTime: {
+    future: "in %s",
+    past: "%s ago",
+    s: "now",
+    m: "1m",
+    mm: "%dm",
+    h: "1hr",
+    hh: "%dhr",
+    d: "1d",
+    dd: "%dd",
+    M: "1mth",
+    MM: "%dmth",
+    y: "1yr",
+    yy: "%dyr",
+  },
+});
 
 export default function Blip(props: Blip) {
   const [currentTime, setCurrentTime] = useState(Date.now());
@@ -22,23 +45,8 @@ export default function Blip(props: Blip) {
     return date.toLocaleString("en-GB", options);
   };
 
-  const getRelativeDate = (createdAt: Date, now: number) => {
-    //const nowDate = new Date(now);
-    //const distance = formatDistance(createdAt, nowDate, { addSuffix: false });
-    //return distance
-    //  .replace(/^about /, "")
-    //  .replace(/^over /, "")
-    //  .replace(/^almost /, "")
-    //  .replace(/^less than a minute$/, "now")
-    //  .replace(/^half a minute$/, "now")
-    //  .replace(/^less than \d+ seconds?$/, "now")
-    //  .replace(/^(\d+) minutes?$/, "$1m")
-    //  .replace(/^(\d+) hours?$/, "$1hr")
-    //  .replace(/^(\d+) days?$/, "$1d")
-    //  .replace(/^(\d+) weeks?$/, "$1w")
-    //  .replace(/^(\d+) months?$/, "$1mth")
-    //  .replace(/^(\d+) years?$/, "$1yr");
-    return "sometime idk";
+  const getRelativeDate = (createdAt: Date) => {
+    return dayjs(createdAt).fromNow(true);
   };
 
   useEffect(() => {
@@ -52,7 +60,7 @@ export default function Blip(props: Blip) {
     <div class="blip" id={props._id}>
       <div class="time">
         <time class="relative" datetime={getISODate(createdAtDate)}>
-          {getRelativeDate(createdAtDate, currentTime)}
+          {getRelativeDate(createdAtDate)}
         </time>
         <time class="absolute" datetime={getISODate(createdAtDate)}>
           {getAbsoluteDate(createdAtDate)}
