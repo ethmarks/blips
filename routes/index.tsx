@@ -61,7 +61,28 @@ export default define.page(function Home() {
       </Head>
       <eth-header active="blips"></eth-header>
       <main>
-        <h1>Blips</h1>
+        <h1 class="animated">Blips</h1>
+        <article class="animated">
+          <div id="intro-top">
+            <p id="definition">Blip (noun) - a ping of activity on a radar</p>
+            <p id="rss">
+              <a href="rss.xml">RSS</a>
+            </p>
+          </div>
+          <div id="intro-text">
+            <p>
+              My Blips are basically my blog. Not to be confused with my{" "}
+              <a href="https://ethmarks.github.io/posts/">Posts</a>, which are
+              long-form and semi-professional articles. Think of Blips as
+              Ethan-flavoured Tumblr. I blip about what I'm up to or about
+              random interesting things I've found that aren't substantial
+              enough to merit a full Post.
+            </p>
+            <p>~Ethan</p>
+          </div>
+          <div id="blips">
+          </div>
+        </article>
       </main>
       <eth-footer source="https://github.com/ethmarks/blips"></eth-footer>
     </>
