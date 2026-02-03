@@ -22,7 +22,8 @@
     "vite": "npm:vite@^7.1.3",
     "sanity": "npm:@sanity/client",
     "gfm": "jsr:@deno/gfm",
-    "github-slugger": "npm:github-slugger@^2.0"
+    "github-slugger": "npm:github-slugger@^2.0",
+    "dayjs": "npm:dayjs"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
