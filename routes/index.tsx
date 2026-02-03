@@ -1,15 +1,8 @@
 import { Head } from "fresh/runtime";
 import { define } from "../utils.ts";
 import { type Blip, fetchBlips } from "../utils/fetchBlips.ts";
-import { render } from "gfm";
-import postProcessCitations from "../utils/blockquoteCitations.ts";
+import { renderMarkdown } from "../utils/renderMarkdown.ts";
 import SingleBlip from "../components/SingleBlip.tsx";
-
-function renderMarkdown(markdown: string) {
-  let html = render(markdown);
-  html = postProcessCitations(html);
-  return html;
-}
 
 const data = await fetchBlips();
 
