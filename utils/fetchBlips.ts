@@ -7,18 +7,19 @@ export const sanityClient = createClient({
   apiVersion: "2025-10-03",
 });
 
-interface Blip {
+export interface Blip {
   _id: string;
   _createdAt: string;
   content: string;
+  renderedContent: string;
 }
 
-interface FetchBlipsResult {
+export interface FetchBlipsResult {
   blips: Blip[];
   allBlipsShown: boolean;
 }
 
-export default async function fetchBlips(
+export async function fetchBlips(
   pageSize = 50,
 ): Promise<FetchBlipsResult> {
   const blips = await sanityClient.fetch<Blip[]>(

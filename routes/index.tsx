@@ -1,8 +1,9 @@
 import { Head } from "fresh/runtime";
 import { define } from "../utils.ts";
-import fetchBlips from "../utils/fetchBlips.ts";
+import { type Blip, fetchBlips } from "../utils/fetchBlips.ts";
 import { render } from "gfm";
 import postProcessCitations from "../utils/blockquoteCitations.ts";
+import SingleBlip from "../islands/SingleBlip.tsx";
 
 function renderMarkdown(markdown: string) {
   let html = render(markdown);
@@ -12,11 +13,20 @@ function renderMarkdown(markdown: string) {
 
 const data = await fetchBlips();
 
-const blipsWithRenderedContent = data.blips.map((blip) => ({
+const blipsWithRenderedContent: Blip[] = data.blips.map((blip) => ({
   ...blip,
   renderedContent: renderMarkdown(blip.content),
 }));
-const allBlipsShown = data.allBlipsShown;
+
+function BlipsList({ renderedBlips }: { renderedBlips: Blip[] }) {
+  return (
+    <div id="blips">
+      {renderedBlips.map((renderedBlip) => (
+        <SingleBlip key={renderedBlip._id} {...renderedBlip} />
+      ))}
+    </div>
+  );
+}
 
 function EndDiv() {
   if (data.allBlipsShown) {
@@ -91,8 +101,7 @@ export default define.page(function Home() {
             </p>
             <p>~Ethan</p>
           </div>
-          <div id="blips">
-          </div>
+          <BlipsList renderedBlips={blipsWithRenderedContent} />
           <EndDiv />
         </article>
       </main>
