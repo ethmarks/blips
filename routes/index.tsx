@@ -18,6 +18,17 @@ const blipsWithRenderedContent = data.blips.map((blip) => ({
 }));
 const allBlipsShown = data.allBlipsShown;
 
+function EndDiv() {
+  if (data.allBlipsShown) {
+    return;
+  }
+  return (
+    <div id="end">
+      <p>Showing the latest 50 blips. Older ones are off-radar...</p>
+    </div>
+  );
+}
+
 export default define.page(function Home() {
   const canonUrl = "https://site-ethmarks.vercel.app/blips";
   const title = "Blips";
@@ -82,6 +93,7 @@ export default define.page(function Home() {
           </div>
           <div id="blips">
           </div>
+          <EndDiv />
         </article>
       </main>
       <eth-footer source="https://github.com/ethmarks/blips"></eth-footer>
