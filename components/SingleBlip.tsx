@@ -1,5 +1,4 @@
 // deno-lint-ignore-file react-no-danger
-import { useEffect, useState } from "preact/hooks";
 import { type Blip } from "../utils/fetchBlips.ts";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -27,8 +26,6 @@ dayjs.updateLocale("en", {
 });
 
 export default function Blip(props: Blip) {
-  const [currentTime, setCurrentTime] = useState(Date.now());
-
   const createdAtDate = new Date(props._createdAt);
 
   const getISODate = (date: Date) => date.toISOString();
@@ -48,13 +45,6 @@ export default function Blip(props: Blip) {
   const getRelativeDate = (createdAt: Date) => {
     return dayjs(createdAt).fromNow(true);
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(Date.now());
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div class="blip" id={props._id}>
