@@ -1,5 +1,22 @@
 import { Head } from "fresh/runtime";
 import { define } from "../utils.ts";
+import fetchBlips from "../utils/fetchBlips.ts";
+import { render } from "gfm";
+import postProcessCitations from "../utils/blockquoteCitations.ts";
+
+function renderMarkdown(markdown: string) {
+  let html = render(markdown);
+  html = postProcessCitations(html);
+  return html;
+}
+
+const data = await fetchBlips();
+
+const blipsWithRenderedContent = data.blips.map((blip) => ({
+  ...blip,
+  renderedContent: renderMarkdown(blip.content),
+}));
+const allBlipsShown = data.allBlipsShown;
 
 export default define.page(function Home() {
   const canonUrl = "https://site-ethmarks.vercel.app/blips";
