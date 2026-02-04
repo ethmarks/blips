@@ -35,11 +35,13 @@ export default define.page(async function Home() {
 
   const allBlipsShown = data.allBlipsShown;
 
+  const basePath = Deno.env.get("FRESH_BASE_PATH") || "";
+
   const canonUrl = "https://site-ethmarks.vercel.app/blips";
   const title = "Blips";
   const desc =
     "Ethan's microblog featuring brief thoughts, activities, and interesting discoveries. A radar ping of activity.";
-  const img = "/blips.png";
+  const img = basePath + "/blips.png";
 
   return (
     <>
@@ -68,6 +70,10 @@ export default define.page(async function Home() {
         <link
           rel="stylesheet"
           href="https://site-ethmarks.vercel.app/common/ethmarks-rich.css"
+        />
+        <link
+          rel="stylesheet"
+          href={basePath + "/styles.css"}
         />
         <script
           src="https://site-ethmarks.vercel.app/common/ethmarks.wc.js"

@@ -1,7 +1,11 @@
 import { App, staticFiles } from "fresh";
 import { type State } from "./utils.ts";
 
-export const app = new App<State>();
+const basePath = Deno.env.get("FRESH_BASE_PATH") || undefined; // "/blips"
+
+export const app = new App<State>({
+  basePath,
+});
 
 app.use(staticFiles());
 
