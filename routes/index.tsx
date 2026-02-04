@@ -80,6 +80,15 @@ export default define.page(async function Home() {
           defer
         >
         </script>
+
+        <script>
+          {"window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };"}
+        </script>
+        <script
+          defer
+          src="https://site-ethmarks.vercel.app/_vercel/insights/script.js"
+        >
+        </script>
       </Head>
       <eth-header active="blips"></eth-header>
       <main>
