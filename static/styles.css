@@ -1,32 +1,11 @@
-article {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-#intro-top {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 0.5rem 0;
-}
-
-#definition {
-    font-weight: 600;
-    font-size: var(--font-size-h3);
-    margin: 0;
-}
-
 #rss {
     margin: 0;
-
-    @media (min-width: 768px) {
-        align-content: center;
-    }
+    text-align: right;
+    margin-bottom: calc(var(--article-margin-vertical) * -1);
 }
 
-#intro-text {
-    color: #c7c7c7;
+#rss.animated {
+    animation: articleEntrance 0.6s var(--transition-timing);
 }
 
 #blips {
@@ -63,23 +42,20 @@ article {
     padding: 0.7rem 1rem;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-
-    :target & {
-        border: var(--border-accent-2px);
-    }
 }
 
-.blip-content {
-    > :first-child {
-        margin-top: 0;
-    }
-    > :last-child {
-        margin-bottom: 0;
-    }
+:target .blip-content:not(:has(> :only-child:is(blockquote, pre))) {
+    border: var(--border-accent-2px);
+}
 
-    blockquote {
-        width: auto;
-    }
+.blip-content > :first-child {
+    margin-top: 0;
+}
+.blip-content > :last-child {
+    margin-bottom: 0;
+}
+.blip-content blockquote {
+    width: auto;
 }
 .time {
     color: #a3a3a3;

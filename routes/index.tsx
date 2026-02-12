@@ -98,24 +98,20 @@ export default define.page(async function Home() {
       <eth-header active="blips"></eth-header>
       <main>
         <h1 class="animated">Blips</h1>
+        <p id="rss" class="animated">
+          <a href="rss.xml">RSS</a>
+        </p>
         <article class="animated">
-          <div id="intro-top">
-            <p id="definition">Blip (noun) - a ping of activity on a radar</p>
-            <p id="rss">
-              <a href="rss.xml">RSS</a>
-            </p>
-          </div>
-          <div id="intro-text">
-            <p>
-              My Blips are basically my blog. Not to be confused with my{" "}
-              <a href="https://ethmarks.github.io/posts/">Posts</a>, which are
-              long-form and semi-professional articles. Think of Blips as
-              Ethan-flavoured Tumblr. I blip about what I'm up to or about
-              random interesting things I've found that aren't substantial
-              enough to merit a full Post.
-            </p>
-            <p>~Ethan</p>
-          </div>
+          <p>
+            <a href="https://github.com/ethmarks/blips">Blips</a>{" "}
+            is my personal microblog. I use Blips to host updates on what I'm
+            doing, random thoughts I had, interesting things I learned, and
+            things like that.
+          </p>
+          <p>
+            The name comes from the nautical term "blip", meaning "a ping of
+            activity on a radar".
+          </p>
           <BlipsList renderedBlips={blipsWithRenderedContent} />
           <EndDiv allBlipsShown={allBlipsShown} />
         </article>
