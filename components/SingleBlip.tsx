@@ -38,6 +38,7 @@ export default function Blip(props: Blip) {
       hour: "numeric",
       hour12: true,
       minute: "numeric",
+      timeZone: "America/New_York",
     };
     return date.toLocaleString("en-GB", options);
   };
