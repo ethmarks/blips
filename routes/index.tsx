@@ -99,7 +99,7 @@ export default define.page(async function Home() {
       <main>
         <h1 class="animated">Blips</h1>
         <p id="rss" class="animated">
-          <a href="rss.xml">RSS</a>
+          <a href={basePath + "/rss.xml"}>RSS</a>
         </p>
         <article class="animated">
           <p>
